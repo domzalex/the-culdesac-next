@@ -94,7 +94,7 @@ export default function TicTacoToe() {
     }, [winner])
 
     useEffect(() => {
-        ws.current = new WebSocket('ws://10.0.0.124:8080')
+        ws.current = new WebSocket('ws://localhost:8080')
 
         ws.current.onopen = () => {
             // console.log('connected to WS server')

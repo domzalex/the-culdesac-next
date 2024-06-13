@@ -48,7 +48,7 @@ export default function Page() {
     const ws = useRef<any>(null)
 
     useEffect(() => {
-        ws.current = new WebSocket('ws://10.0.0.124:8080')
+        ws.current = new WebSocket('ws://localhost:8080')
 
         ws.current.onopen = () => {
             console.log('connected to WS server')
