@@ -2,7 +2,6 @@ const { REST, Routes } = require('discord.js');
 require('dotenv').config()
 const axios = require('axios')
 
-
 const commands = [
   {
     name: 'fact',
