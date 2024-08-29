@@ -1,8 +1,14 @@
 const WebSocket = require('ws')
+const https = require('https')
+const fs = require('fs')
 
-const wss = new WebSocket.Server({ port: 8080 })
+// Load your SSL/TLS certificate and key
+const server = https.createServer({
+    cert: fs.readFileSync('/etc/letsencrypt/live/theculdesac.club/cert.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/theculdesac.club/privkey.pem')
+})
 
-console.log(process.env.TOKEN)
+const wss = new WebSocket.Server({ server })
 
 wss.on('connection', (ws) => {
     console.log("client connected")
@@ -50,4 +56,6 @@ wss.on('connection', (ws) => {
     })
 })
 
-console.log('web socket running on localhost:8080')
+server.listen(8080, () => {
+    console.log('WebSocket server listening on port 8080')
+})

@@ -42,19 +42,18 @@ export default function Page() {
         image: ""
     })
 
-
-
-
     const ws = useRef<any>(null)
 
     useEffect(() => {
-        ws.current = new WebSocket('ws://localhost:8080')
+        // const wsProtocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws'
+        ws.current = new WebSocket(`wss://theculdesac.club:8080`)
 
         ws.current.onopen = () => {
-            console.log('connected to WS server')
+            console.log('CONNECTED??')
         }
 
         ws.current.onmessage = (e: any) => {
+            console.log(e)
             const newMessage = JSON.parse(e.data)
             setMessages((prev) => [...prev, newMessage.data])
         }
@@ -63,6 +62,36 @@ export default function Page() {
             ws.current.close()
         }
     }, [])
+
+    // const ws = useRef<WebSocket | null>(null);
+
+    // useEffect(() => {
+    //     ws.current = new WebSocket('wss://theculdesac.club:8080');
+
+    //     ws.current.onopen = () => {
+    //         console.log('WebSocket connected');
+    //     };
+
+    //     ws.current.onerror = (error) => {
+    //         console.error('WebSocket error:', error);
+    //     };
+
+    //     ws.current.onclose = (event) => {
+    //         console.log('WebSocket closed:', event);
+    //     };
+
+    //     ws.current.onmessage = (e: MessageEvent) => {
+    //         console.log('Message received:', e);
+    //         const newMessage = JSON.parse(e.data);
+    //         setMessages((prev) => [...prev, newMessage.data]);
+    //     };
+
+    //     return () => {
+    //         if (ws.current) {
+    //             ws.current.close();
+    //         }
+    //     };
+    // }, []);
 
 
 
@@ -81,7 +110,9 @@ export default function Page() {
                             },
                             body: JSON.stringify(message)
                         })
-                        ws.current.send(JSON.stringify({type: 'chat', message:message}))
+                        if (ws.current) {
+                            ws.current.send(JSON.stringify({type: 'chat', message:message}))
+                        }
                         setMessageTextContent('')
                         setMessage({
                             user: user,
@@ -95,7 +126,9 @@ export default function Page() {
                         console.error("Error sending message from frontend: ", error.message)
                     }
                 } else {
-                    ws.current.send(JSON.stringify({type: 'chat', message:message}))
+                    if (ws.current) {
+                        ws.current.send(JSON.stringify({type: 'chat', message:message}))
+                    }
                     setMessageTextContent('')
                     setMessage({
                         user: user,

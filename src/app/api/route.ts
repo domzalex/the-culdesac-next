@@ -7,19 +7,25 @@ export async function GET(req: NextRequest) {
     const tag = new URL(req.url).searchParams.get('tag')
     // const user = new URL(req.url).searchParams.get('user')
     const id = new URL(req.url).searchParams.get('_id')
+
+    console.log(id)
     
     const db = await clientPromise()
 
     let allPosts
 
-    if (tag !== 'null' && tag !== null && tag) {
-        allPosts = await db.collection('newblogentries').find({ tag: tag }).sort({ date: -1 }).toArray()
+    if (tag !== 'null' && tag !== null && tag && id == null) {
+        console.log("All posts by tag")
+        allPosts = await db.collection('newblogentries').find({ tag: tag }).sort({ _id: -1 }).toArray()
     }
-    else if (id) {
+    if (id != null) {
+        console.log("One post with id: ", id)
         allPosts = await db.collection('newblogentries').find({ _id: new ObjectId(id) }).toArray()
+        console.log(allPosts[0].date)
     }
     else {
-        allPosts = await db.collection('newblogentries').find({}).sort({ date: -1 }).toArray()
+        console.log("All posts")
+        allPosts = await db.collection('newblogentries').find({}).sort({ _id: -1 }).toArray()
     }
 
     return NextResponse.json({ posts: allPosts })

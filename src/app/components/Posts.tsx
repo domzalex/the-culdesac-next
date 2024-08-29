@@ -94,7 +94,7 @@ export default function Posts({ tag, userLoggedIn }: { tag: string, userLoggedIn
                                 </div>
                                 <div className='sm:w-full flex items-center gap-3'>
                                     <h2 className='font-light text-gray-400 text-xs'>{post.date}</h2>
-                                    <h2 className='font-light text-gray-400 text-xs bg-gray-200 p-1 px-2 rounded-full'>{post.tag}</h2>
+                                    <h2 className='font-light text-gray-400 text-xs bg-gray-200 p-1 px-2 rounded-full'>{post.tag.toLowerCase()}</h2>
                                 </div>
                             </div>
                             <div className='font-light text-sm whitespace-pre-wrap max-w-[800px]' dangerouslySetInnerHTML={{ __html: post.content }} />

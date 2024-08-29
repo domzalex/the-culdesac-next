@@ -21,8 +21,8 @@ const unSelectedDivStyle = 'p-2 flex items-center rounded-lg border border-trans
 const selectedH1Style = 'font-light text-blue-500'
 const unSelectedH1Style = 'font-light text-white'
 
-const toggledNavStyle = 'h-screen w-64 bg-blue-500 flex flex-col p-6 pt-2 gap-6 sm:w-screen sm:h-full sm:z-40 sm:overflow-y-hidden sm:absolute'
-const hiddenNavStyle = 'h-screen w-64 bg-blue-500 flex flex-col p-6 pt-2 gap-6 sm:w-screen sm:h-auto sm:z-40 sm:overflow-y-hidden sm:absolute sm:pb-0'
+const toggledNavStyle = 'h-screen w-64 bg-blue-500 flex flex-col p-3 pt-2 gap-6 sm:w-screen sm:h-full sm:z-40 sm:overflow-y-hidden sm:absolute'
+const hiddenNavStyle = 'h-screen w-64 bg-blue-500 flex flex-col p-3 pt-2 gap-6 sm:w-screen sm:h-auto sm:z-40 sm:overflow-y-hidden sm:absolute sm:pb-0'
 
 const navLinksShownStyle = 'flex flex-col gap-6'
 const navLinksHiddenStyle = 'flex flex-col gap-6 sm:hidden'
@@ -78,12 +78,16 @@ export default function Nav() {
 
     return (
         <nav className={navToggled ? toggledNavStyle : hiddenNavStyle}>
-            <div className={navToggled ? 'border-b pb-3 w-full flex items-center justify-center sm:justify-between sm:border-b-1' : 'border-b pb-3 w-full flex items-center justify-center sm:justify-between sm:border-b-0'}>
+            <div className={navToggled ? 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-1' : 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-0'}>
                 <Link href="/" onClick={() => handleClick('/')} className='flex flex-col sm:flex-row sm:gap-2 sm:items-end'>
                     <h1 className='text-lg font-light text-white text-center sm:text-left'>the</h1>
                     <h1 className='text-white font-black text-3xl text-center'>CUL-DE-SAC</h1>
                 </Link>
-                <button className='hidden sm:flex bg-white h-6 w-6' onClick={navToggle}></button>
+                <div className='hidden sm:flex h-6 w-7 cursor-pointer flex flex-col justify-between' onClick={navToggle}>
+                    <div className='bg-white h-[3px] rounded-lg w-full'></div>
+                    <div className='bg-white h-[3px] rounded-lg w-full'></div>
+                    <div className='bg-white h-[3px] rounded-lg w-full'></div>
+                </div>
             </div>
             <div className={navToggled ? navLinksShownStyle : navLinksHiddenStyle}>
 

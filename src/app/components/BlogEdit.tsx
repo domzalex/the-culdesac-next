@@ -29,13 +29,14 @@ export default function BlogEdit() {
 
     useEffect(() => {
         const getEditablePost = async () => {
-            const response = await fetch(`/api?_id=${id}`, {
+            const response = await fetch(`/api?_id=${param}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
             const res = await response.json()
+            console.log(res)
             setPostData({
                 name: res.posts[0].name,
                 title: res.posts[0].title,
@@ -73,15 +74,15 @@ export default function BlogEdit() {
 
     return (
         session && session.user && user == postData.name) ? (
-            <div className='px-8 flex flex-col justify-center items-center gap-5 bg-white sm:px-3 relative w-full'>
+            <div className='flex-1 flex flex-col justify-center items-center px-2 gap-5 bg-white sm:px-3 relative'>
 
-                <div className='flex flex-col items-start gap-1 w-full max-w-[800px] '>
+                <div className='flex flex-col items-start gap-2 w-full max-w-[800px] '>
                     <div className='flex items-center w-full gap-2 sm:w-full sm:items-end sm:gap-1'>
                         <input className='font-bold border w-full rounded-lg p-2 sm:text-xl' name="title" onChange={handleChange} value={postData.title} />
                     </div>
                     <div className='sm:w-full flex items-center gap-3'>
                         <h2 className='font-light text-gray-400 text-xs'>{postData.date}</h2>
-                        <h2 className='font-light text-gray-400 text-xs bg-gray-200 p-1 px-2 rounded-full'>{postData.tag}</h2>
+                        <input className='font-light text-gray-400 text-xs bg-gray-200 p-1 px-2 rounded-full border-gray-300 border' type='text' name='tag' onChange={handleChange} value={postData.tag.toLowerCase()} />
                     </div>
                 </div>
                 <textarea className='border p-2 rounded-lg h-96 w-full font-light text-sm whitespace-pre-wrap max-w-[800px] resize-none' name="content" onChange={handleChange} value={ postData.content } />

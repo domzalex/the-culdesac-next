@@ -20,6 +20,7 @@
     "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18",
+    "socketio": "^1.0.0",
     "ws": "^8.17.0"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/socket.io": "^3.0.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
