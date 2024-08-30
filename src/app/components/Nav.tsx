@@ -125,7 +125,7 @@ export default function Nav() {
 
             <div className={navToggled ? 'w-full flex-1 flex items-end' : 'w-full flex-1 flex items-end sm:hidden'}>
                 {status == 'authenticated' ? (
-                    <button className='text-white font-bold text-sm rounded-lg border-white border py-2 w-full hover:text-blue-500 hover:bg-white' onClick={() => {signOut(); navToggle()}}>Logout</button>
+                    <button className='text-white font-bold text-sm rounded-lg border-white border py-2 w-full hover:text-blue-500 hover:bg-white' onClick={() => {signOut({ callbackUrl: '/', redirect:true }); navToggle()}}>Logout</button>
                 ) : (
                     status == 'loading' ? (
                         null
