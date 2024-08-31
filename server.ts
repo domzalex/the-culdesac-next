@@ -8,7 +8,7 @@ Refs:
 
 import { createServer } from "node:http";
 import next from "next";
-import { Server } from 'socket.io'
+import { Server } from "socket.io"
 
 require('dotenv').config()
 
@@ -25,11 +25,18 @@ app.prepare().then(() => {
   const io = new Server(httpServer);
 
   io.on("connection", (socket: any) => {
-    console.log(`WS: Client connected on socket ${socket.id}`)
+    const { user } = socket.handshake.query
+    io.emit('new-user', user)
+    console.log(`WS: Client connected on socket ${socket.id} and user ${user}`)
 
 	socket.conn.once("upgrade", () => {
 		console.log(`WS: Transport for socket ${socket.id} upgraded to ${socket.conn.transport.name}`);
 	});
+
+    socket.on('chat', (data: any) => {
+        // Convert the responseData to a JSON string and send it
+        io.emit('chat', JSON.stringify(data))
+    })
 
 	socket.on("disconnect", (reason: string) => {
 		console.log(`WS: Client disconnected from socket ${socket.id} because ${reason}`)

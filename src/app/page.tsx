@@ -13,7 +13,6 @@ export default function Home() {
                 <h3 className='text-5xl text-gray-400 sm:text-xl font-light'>my digital playground.</h3>
                 <h3 className='text-5xl text-gray-400 sm:text-xl font-light'>Feel free to take alook around!</h3>
             </div>
-            <Image src="/alex-3-blue.png" width="200" height="200" alt="alex" className='absolute bottom-0 right-0 sharp-image'/>
         </div>
     )
 }

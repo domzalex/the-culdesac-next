@@ -79,7 +79,7 @@ export default function Posts({ tag, userLoggedIn }: { tag: string, userLoggedIn
 
     return (
         <div className='overflow-hidden flex-1'>
-            <div className='h-full w-full divide-y overflow-y-scroll'>
+            <div className='h-full w-full divide-y dark:divide-neutral-700 overflow-y-scroll'>
                 {loading ? (
                     <div className='h-full w-full flex flex-col gap-8 items-center justify-center'>
                         <div className="lds-ripple"><div></div><div></div></div>
@@ -87,21 +87,21 @@ export default function Posts({ tag, userLoggedIn }: { tag: string, userLoggedIn
                     </div>
                 ) : (
                     filteredPosts.length > 0 ? (filteredPosts.map((post, index) => (
-                        <div key={index} className='p-8 py-12 flex flex-col gap-5 bg-white sm:px-3 relative'>
+                        <div key={index} className='p-8 py-12 flex flex-col gap-5 bg-white dark:bg-neutral-800 sm:px-3 relative'>
                             <div className='flex flex-col items-start gap-1'>
                                 <div className='flex items-center gap-2 sm:w-full sm:items-end sm:gap-1'>
-                                    <h1 className='font-bold sm:text-xl'>{post.title} <span className='font-light text-gray-400 text-xs pt-1 sm:pb-0.5 px-1'> by </span><span className='text-blue-500'> {post.name}</span></h1>
+                                    <h1 className='font-bold sm:text-xl dark:text-neutral-200'>{post.title} <span className='font-light text-gray-400 text-xs pt-1 sm:pb-0.5 px-1'> by </span><span className='text-blue-500'> {post.name}</span></h1>
                                 </div>
                                 <div className='sm:w-full flex items-center gap-3'>
                                     <h2 className='font-light text-gray-400 text-xs'>{post.date}</h2>
-                                    <h2 className='font-light text-gray-400 text-xs bg-gray-200 p-1 px-2 rounded-full'>{post.tag.toLowerCase()}</h2>
+                                    <h2 className='font-light text-gray-400 text-xs bg-gray-200 dark:bg-neutral-700 p-1 px-2 rounded-full'>{post.tag.toLowerCase()}</h2>
                                 </div>
                             </div>
-                            <div className='font-light text-sm whitespace-pre-wrap max-w-[800px]' dangerouslySetInnerHTML={{ __html: post.content }} />
+                            <div className='font-light text-sm whitespace-pre-wrap max-w-[800px] dark:text-neutral-400' dangerouslySetInnerHTML={{ __html: post.content }} />
                             {(session && session.user && user == post.name) ? (
                                 <div className='flex gap-2 absolute bottom-3 left-3'>
                                     <button className='text-blue-500 hover:underline' onClick={() => editPost(post._id)}>Edit</button>
-                                    <span>/</span>
+                                    <span className='dark:text-neutral-700'>/</span>
                                     <button className='text-red-500 hover:underline' onClick={() => deletePost(post._id)}>Delete</button>
                                 </div>
                             ) : null}

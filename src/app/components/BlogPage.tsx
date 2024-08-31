@@ -25,7 +25,7 @@ export default function BlogPage() {
     }
 
     return (
-        <div className='bg-gray-100 flex-1 relative flex flex-col sm:pt-[52px] sm:w-full'>
+        <div className='bg-gray-100 dark:bg-neutral-800 flex-1 relative flex flex-col sm:pt-[52px] sm:w-full'>
             <Search text="Filter by tag..." func={toggleTag} currentUser={currentUser} />
             <Posts tag={tag} userLoggedIn={currentUser}/>
         </div>
