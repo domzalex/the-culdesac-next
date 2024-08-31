@@ -78,7 +78,7 @@ export default function Nav() {
 
     return (
         <nav className={navToggled ? toggledNavStyle : hiddenNavStyle}>
-            <div className={navToggled ? 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-1 dark:border-b-neutral-800' : 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-0'}>
+            <div className={navToggled ? 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-1 dark:border-b-neutral-800' : 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-0 dark:border-b-neutral-800'}>
                 <Link href="/" onClick={() => handleClick('/')} className='flex flex-col sm:flex-row sm:gap-2 sm:items-end'>
                     <h1 className='text-lg font-light text-white dark:text-neutral-200 text-center sm:text-left'>the</h1>
                     <h1 className='text-white dark:text-neutral-200 font-black text-3xl text-center'>CUL-DE-SAC</h1>

@@ -184,7 +184,7 @@ export default function Page() {
 
     return (
         <div className='bg-gray-100 dark:bg-neutral-800 flex-1 relative flex flex-col'>
-            <div className='w-full h-16 bg-white dark:bg-neutral-900 border-b dark:border-b-transparent flex items-center justify-between px-6 sm:hidden'>
+            <div className='w-full h-[52px] bg-white dark:bg-neutral-900 border-b dark:border-b-transparent flex items-center justify-between px-6 sm:hidden'>
                 <h1 className='font-bold text-xl dark:text-neutral-200'>Cul-De-Sac Chat</h1>
             </div>
 
@@ -202,7 +202,7 @@ export default function Page() {
                                     message.user == user ? (
                                         <div key={index} className='py-0.5 flex flex-col items-end'>
                                             <div className='inline-block'>
-                                                <p className='max-w-[800px] sm:max-w-64 bg-blue-500 dark:bg-blue-800 text-white dark:text-neutral-300 p-1.5 px-3 rounded-xl'>{message.messageText}</p>
+                                                <p className='max-w-[800px] sm:max-w-64 bg-blue-500 dark:bg-blue-800 text-white dark:text-neutral-100 p-1.5 px-3 rounded-xl'>{message.messageText}</p>
                                             </div>
                                         </div>
                                     ) : (
