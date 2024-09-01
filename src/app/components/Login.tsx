@@ -54,6 +54,7 @@ export default function Login() {
                     required
                 />
                 <button type="submit" className='bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-1.5 px-3 w-2/3 max-w-96'>Login</button>
+                {/* <button className='bg-transparent text-blue-500 rounded-lg p-1.5 px-3 w-2/3 max-w-96' onClick={() => {window.location.href = '/register'}}>Register</button> */}
             </form>
         </div>
     )

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import io, { Socket } from 'socket.io-client'
+import Image, { ImageLoaderProps } from 'next/image'
 
 const uid = v4()
 export default function Page() {
@@ -50,7 +51,7 @@ export default function Page() {
         socket.current = io()
 
         socket.current.on('connect', () => {
-            console.log('CONNECTED??')
+            console.log('Client Connected to WebSocket')
         })
 
         socket.current.on('chat', (data: any) => {
@@ -71,6 +72,25 @@ export default function Page() {
     }, [user])
 
     const bottomScroll = useRef<any>(null)
+
+    function extractImageUrls(input: string): { cleanedString: string, imageUrls: string[] } {
+        // Regular expression to match URLs that contain image file extensions
+        const imageUrlRegex = /https?:\/\/[^\s]+?\.(png|jpg|jpeg|gif|bmp|webp)(\?[^\s]*)?/gi;
+    
+        // Array to store the found image URLs
+        const imageUrls: string[] = []
+    
+        // Replace the found image URLs in the input string with an empty string and store them in the array
+        const cleanedString = input.replace(imageUrlRegex, (match) => {
+            imageUrls.push(match)
+            return '' // Remove the URL from the string
+        }).trim()
+    
+        return {
+            cleanedString,
+            imageUrls,
+        }
+    }
 
     useEffect(() => {
         const onSubmit = async () => {
@@ -99,6 +119,14 @@ export default function Page() {
                         console.error("Error sending message from frontend: ", error.message)
                     }
                 } else {
+                    // const { cleanedString, imageUrls } = extractImageUrls(message.messageText)
+
+                    // console.log(cleanedString, imageUrls)
+
+                    // setMessage({
+                    //     user: user,
+                    //     dateTime: 
+                    // })
 
                     socket.current?.emit('chat', { type: 'chat', message: message })
                     
@@ -148,6 +176,9 @@ export default function Page() {
 
     useEffect(() => {
         scrolling()
+        messages.forEach((message, index) => {
+            console.log(messages[index].user)
+        })
     }, [messages])
 
     const scrolling = () => {
@@ -162,24 +193,30 @@ export default function Page() {
 
     const setMessageToSend = () => {
         if (session && session.user) {
+            const { cleanedString, imageUrls } = extractImageUrls(messageTextContent)
             setMessage({
                 user: user,
                 dateTime: new Date().toUTCString(),
-                messageText: messageTextContent,
+                messageText: cleanedString,
                 gif: "",
-                image: ""
+                image: imageUrls[0]
             })
             setReadyToSend(true)
         } else {
+            const { cleanedString, imageUrls } = extractImageUrls(messageTextContent)
             setMessage({
                 user: uid,
                 dateTime: new Date().toUTCString(),
-                messageText: messageTextContent,
+                messageText: cleanedString,
                 gif: "",
-                image: ""
+                image: imageUrls[0]
             })
             setReadyToSend(true)
         }
+    }
+
+    const imageLoader = ({ src }: ImageLoaderProps): string => {
+        return src
     }
 
     return (
@@ -195,25 +232,42 @@ export default function Page() {
                 </div>
             ) : (
                 <>
-                    <div ref={bottomScroll} className='w-full flex-1 overflow-y-scroll overflow-x-hidden sm:pt-14 chatBg relative'>
+                    <div ref={bottomScroll} className='w-full flex-1 overflow-y-scroll overflow-x-hidden sm:pt-8 chatBg relative'>
                         {messages ? (
                             <div className='px-3 py-3'>
-                                {messages.map((message: Message, index) => (
-                                    message.user == user ? (
-                                        <div key={index} className='py-0.5 flex flex-col items-end'>
-                                            <div className='inline-block'>
-                                                <p className='max-w-[800px] sm:max-w-64 bg-blue-500 dark:bg-blue-800 text-white dark:text-neutral-100 p-1.5 px-3 rounded-xl'>{message.messageText}</p>
+                                {messages.map((message: Message, index) => {
+                                    const isUserMessage = message.user === user;
+                                    const isSameUserAsPrevious = index > 0 && messages[index - 1].user === message.user;
+
+                                    const paddingTop = isUserMessage
+                                        ? (isSameUserAsPrevious ? 'py-0.5' : 'pt-9')
+                                        : (isSameUserAsPrevious ? 'pt-0.5' : 'pt-9');
+
+                                    // Determine classes for the container based on message origin
+                                    const containerClasses = `flex flex-col ${isUserMessage ? 'items-end' : 'items-start'} ${paddingTop}`;
+
+                                    // Determine classes for the message container
+                                    const messageContainerClasses = `relative flex flex-col ${isUserMessage ? 'items-end' : 'items-start'}`;
+
+                                    return (
+                                        <div key={index} className={containerClasses}>
+                                            <div className={messageContainerClasses}>
+                                                {/* Display user name if the message is not from the user and previous message is from a different user */}
+                                                {!isUserMessage && !isSameUserAsPrevious && (
+                                                    <h1 className='text-xs text-gray-400 font-light absolute w-screen top-[-17px]'>{message.user}</h1>
+                                                )}
+                                                {message.image && (
+                                                    <Image loader={imageLoader} src={message.image} alt="" width={250} height={250} className='rounded-lg mb-1'/>
+                                                )}
+                                                {message.messageText && (
+                                                    <p className={`inline-block p-1.5 px-3 rounded-lg ${isUserMessage ? 'bg-blue-500 dark:bg-blue-800 text-white dark:text-neutral-100' : 'bg-gray-200 dark:bg-neutral-700 text-black dark:text-neutral-300'} max-w-[800px] sm:max-w-64`}>
+                                                        {message.messageText}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div key={index} className='py-3 pt-6 flex flex-col items-start'>
-                                            <div className='max-w-[800px] sm:max-w-70 relative'>
-                                                <h1 className='text-xs text-gray-400 font-light absolute w-screen top-[-17px]'>{message.user}</h1>
-                                                <p className='text-black dark:text-neutral-300 bg-gray-200 dark:bg-neutral-700 p-1.5 px-3 rounded-xl sm:max-w-[80vw]'>{message.messageText}</p>
-                                            </div>
-                                        </div>
-                                    )
-                                ))}
+                                    );
+                                })}
                                 <div id="latestMessage"></div>
                             </div>
                         ) : ( <div></div> )}
@@ -222,7 +276,7 @@ export default function Page() {
                     <div className='w-full h-32 bg-white dark:bg-neutral-900 border-t dark:border-t-transparent flex items-center justify-center p-3 gap-3 sm:h-16 relative'>
                         {!session ? (
                             <div className='absolute top-[-25px] left-0 w-full text-center'>
-                                <h1 className='text-gray-300 dark:text-neutral-600 font-light text-sm translate-y-[5px]'>If you are not logged in, your messages will not persist.</h1>
+                                {/* <h1 className='text-gray-300 dark:text-neutral-600 font-light text-xs translate-y-[8px]'>If you are not logged in, your messages will not persist.</h1> */}
                             </div>
                         ) : null}
                         <textarea name="message" value={messageTextContent} onChange={handleChange} placeholder='Enter a message...' className='resize-none border dark:border-transparent dark:bg-neutral-800 dark:text-neutral-300 rounded-lg h-full flex-1 p-3 py-2 sm:px-3 sm:py-1.5' />

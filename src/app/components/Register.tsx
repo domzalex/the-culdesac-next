@@ -3,6 +3,7 @@
 import { signIn } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState, Suspense } from 'react'
+import { POST } from '../api/route'
 
 export default function Register() {
 
@@ -21,23 +22,28 @@ export default function Register() {
     const handleSubmit = async (e: any) => {
         e.preventDefault()
 
-        const res = await signIn('credentials', {
-            redirect: false,
-            username,
-            password
+        const res = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username, password: password })
         })
 
-        if (res && res.ok) {
-            window.location.href = redirectURL
+        const responseData = await res.json()
+
+        if (res && res.ok && !responseData.code) {
+            window.location.href = '/'
         } else {
-            alert('Login failed')
+            alert(`Registration failed: ${responseData.message}`)
         }
     }
 
     return (
-        <div className='bg-gray-100 flex-1 relative flex flex-col items-center justify-center'>
-            <form onSubmit={handleSubmit}>
+        <div className='bg-gray-100 dark:bg-neutral-800 flex-1 relative flex flex-col items-center justify-center'>
+            <form onSubmit={handleSubmit} action="POST" className='w-full flex flex-col gap-3 items-center'>
                 <input
+                    className='w-2/3 max-w-96 p-1.5 px-3 rounded-lg dark:bg-neutral-700 dark:text-neutral-100'
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -45,13 +51,15 @@ export default function Register() {
                     required
                 />
                 <input
+                    className='w-2/3 max-w-96 p-1.5 px-3 rounded-lg dark:bg-neutral-700 dark:text-neutral-100'
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
                     required
                 />
-                <button type="submit">Login</button>
+                <button type="submit" className='bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-1.5 px-3 w-2/3 max-w-96'>Register</button>
+                <button className='bg-transparent text-blue-500 rounded-lg p-1.5 px-3 w-2/3 max-w-96' onClick={() => {window.location.href = '/login'}}>Login</button>
             </form>
         </div>
     )

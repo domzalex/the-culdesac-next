@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         const existingUser = await userCollection.findOne({ username });
 
         if (existingUser) {
-            return NextResponse.json({ message: 'Username already exists' });
+            return NextResponse.json({ code: 1, message: 'User already exists' });
         }
 
         const hashedPassword = await hash(password, SALT_ROUNDS);

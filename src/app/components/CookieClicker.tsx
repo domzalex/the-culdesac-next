@@ -39,6 +39,8 @@ export default function CookieClicker() {
         'Alchemy Lab': {name: 'Alchemy Lab', amount: 0, productivity: 1600000, cost: 75000000000, baseCost: 75000000000},
     })
 
+    const lastHiddenTimeRef = useRef(0)
+
     const addCookies = (amount: number) => {
         setCookieTotal(prev => (
             prev + amount
@@ -61,6 +63,59 @@ export default function CookieClicker() {
         }
     }
 
+    const saveState = () => {
+        localStorage.setItem('upgrades', JSON.stringify(upgrades))
+        localStorage.setItem('cookieTotal', cookieTotal.toString())
+        localStorage.setItem('cookiesPerSecond', cookiesPerSecond.toString())
+        localStorage.setItem('cookiesPerClick', cookiesPerClick.toString())
+
+        alert("Progress saved!")
+    }
+
+    useEffect(() => {
+        const handleWindowVisibility = () => {
+            if (document.visibilityState === 'hidden') {
+                lastHiddenTimeRef.current = performance.now()
+            } else if (document.visibilityState === 'visible') {
+                const currentTime = performance.now()
+                const timeDelta = (currentTime - lastHiddenTimeRef.current) / 1000
+
+                const cookiesToAdd = timeDelta * cookiesPerSecond
+                setCookieTotal((prev) => prev + cookiesToAdd)
+            }
+        }
+
+        document.addEventListener('visibilitychange', handleWindowVisibility)
+        
+        return () => {
+            document.removeEventListener('visibilitychange', handleWindowVisibility);
+        }
+    }, [cookiesPerSecond])
+
+    useEffect(() => {
+        const up = localStorage.getItem('upgrades')
+        const total = localStorage.getItem('cookieTotal')
+        const cookieps = localStorage.getItem('cookiesPerSecond')
+        const cookiepcl = localStorage.getItem('cookiesPerClick')
+
+        if (up) {
+            const parsedUpgrades: Upgrades = JSON.parse(up)
+            setUpgrades(parsedUpgrades)
+        }
+        if (total) {
+            const totalInteger = parseInt(total)
+            setCookieTotal(totalInteger)
+        }
+        if (cookieps) {
+            const cookiesPerSecondInteger = parseInt(cookieps)
+            setCookiesPerSecond(cookiesPerSecondInteger)
+        }
+        if (cookiepcl) {
+            const cookiesPerClickInteger = parseInt(cookiepcl)
+            setCookiesPerClick(cookiesPerClickInteger)
+        }
+    }, [])
+
     useEffect(() => {
         let amt = 0
         Object.entries(upgrades).forEach(upgrade => {
@@ -82,42 +137,40 @@ export default function CookieClicker() {
     }, [cookiesPerSecond])
 
     return (
-        <div className='bg-gray-100 flex-1 h-full relative flex flex-col'>
-            <div className='w-full h-16 bg-white border-b flex items-center justify-center px-6 sm:hidden'>
-                <h1 className='text-center font-black text-2xl'>THIS GAME DOESN'T SAVE. PROGRESS DELETED WHEN LEAVING THE PAGE.</h1>
-            </div>
+        <div className='bg-gray-100 flex-1 h-full relative flex flex-col chatBg'>
             <div className='w-full flex-1 flex sm:flex-col sm:h-dvh'>
-                <div className='w-1/2 flex flex-col flex-1 items-center gap-6 sm:w-full sm:h-3.4 p-3 px-2'>
-                    <div className='mt-32 sm:mt-12 sm:flex sm:justify-between sm:w-full'>
-                        <h1 className='text-center text-gray-400 font-light text-xl'>Cookies per second:</h1>
-                        <h1 className='text-center font-bold text-xl'>{cookiesPerSecond}</h1>
+                <div className='w-1/2 flex flex-col flex-1 items-center gap-6 sm:w-full sm:h-3.4 relative'>
+                    <div className='mt-32 sm:mt-[52px] sm:flex sm:justify-between sm:items-center sm:w-full sm:dark:bg-neutral-900 sm:p-3 sm:py-1'>
+                        <h1 className='text-center text-gray-400 dark:text-neutral-500 font-light text-sm'>Cookies per second:</h1>
+                        <h1 className='text-center font-bold text-sm dark:text-neutral-500'>{cookiesPerSecond}</h1>
                     </div>
                     <div className='sm:hidden'>
-                        <h1 className='text-center text-gray-400 font-light'>Cookies per click:</h1>
-                        <h1 className='text-center font-bold text-xl'>{cookiesPerClick}</h1>
+                        <h1 className='text-center text-gray-400 dark:text-neutral-500 font-light'>Cookies per click:</h1>
+                        <h1 className='text-center font-bold text-xl dark:text-neutral-500'>{cookiesPerClick}</h1>
                     </div>
-                    <Image src={cookieImg} width="250" height="250" alt="cookie to click to get cookies" onClick={() => addCookies(cookiesPerClick)} className='cursor-pointer transition-all duration-100 hover:scale-[1.05] active:scale-[1.025]'/> 
-                    <div>
-                        <h1 className='text-center text-gray-400 font-light text-xl'>Cookies:</h1>
-                        <h1 className='text-center font-bold text-xl'>{Math.floor(cookieTotal)}</h1>
+                    <Image src={cookieImg} width="200" height="200" alt="cookie to click to get cookies" onClick={() => addCookies(cookiesPerClick)} className='cursor-pointer transition-all duration-100 hover:scale-[1.05] active:scale-[1.025]'/> 
+                    <div className='mb-3'>
+                        <h1 className='text-center text-gray-400 dark:text-neutral-500 font-light text-xl'>Cookies:</h1>
+                        <h1 className='text-center font-bold text-xl dark:text-neutral-500'>{Math.floor(cookieTotal)}</h1>
                     </div>
+                    <Image src={'/save.svg'} alt='save icon' width={25} height={25} className='absolute top-[93px] left-3' onClick={saveState} />
                 </div>
                 <div className='w-1/2 flex-1 flex flex-col sm:w-full sm:h-1/4'>
                     <div className='h-1/3 bg-gray-300 sm:hidden'></div>
-                    <div className='flex flex-col h-2/3 overflow-y-scroll bg-gray-200 divide-y divide-gray-300 sm:h-full'>
+                    <div className='flex flex-col h-2/3 overflow-y-scroll bg-gray-200 dark:bg-neutral-900 divide-y dark:divide-neutral-700 divide-gray-300 sm:h-full'>
                         {Object.entries(upgrades).map((upgrade, index) => (
-                            <div key={index} onClick={() => purchaseUpgrade(upgrade[1].name)} className={cookieTotal >= upgrade[1].cost ? 'cursor-pointer flex justify-between p-3 hover:bg-gray-300 sm:p-1 sm:px-2' : 'cursor-pointer flex opacity-50 justify-between p-3 sm:p-1 sm:px-2'}>
+                            <div key={index} onClick={() => purchaseUpgrade(upgrade[1].name)} className={cookieTotal >= upgrade[1].cost ? 'cursor-pointer flex justify-between p-3 hover:bg-gray-300 dark:hover:bg-neutral-700 sm:p-1 sm:px-2' : 'cursor-pointer flex opacity-50 justify-between p-3 sm:p-1 sm:px-2'}>
                                 <div className='flex items-end gap-6 sm:gap-0'>
                                     <div>
-                                        <h2 className='text-left text-gray-400 font-light text-xs'>Amount</h2>
-                                        <h1 className='text-2xl font-black text-[#696969] sm:text-lg'>{upgrade[1].amount}</h1>
+                                        <h2 className='text-left text-gray-400 dark:text-neutral-500 font-light text-xs'>Amount</h2>
+                                        <h1 className='text-2xl font-black text-[#696969] dark:text-neutral-500 sm:text-lg'>{upgrade[1].amount}</h1>
                                     </div>
-                                    <h1 className='text-2xl font-black text-[#696969] sm:text-lg'>{upgrade[1].name}</h1>
+                                    <h1 className='text-2xl font-black text-[#696969] dark:text-neutral-500 sm:text-lg'>{upgrade[1].name}</h1>
                                 </div>
                                 <div>
                                     <div>
-                                        <h2 className='text-right text-gray-400 font-light text-xs'>Cost</h2>
-                                        <h1 className='text-2xl text-[#696969] sm:text-lg'>{upgrade[1].cost}</h1>
+                                        <h2 className='text-right text-gray-400 dark:text-neutral-500 font-light text-xs'>Cost</h2>
+                                        <h1 className='text-2xl text-[#696969] dark:text-neutral-500 sm:text-lg'>{upgrade[1].cost}</h1>
                                     </div>
                                 </div>
                             </div>
