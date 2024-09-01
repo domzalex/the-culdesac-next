@@ -46,6 +46,7 @@ export default function Nav() {
     const [navLinks, setNavLinks] = useState<NavLinks>({
         '/chat': {selected: false, text: "Chat", icon: chatIcon},
         '/blog': {selected: false, text: "Blog", icon: blogIcon},
+        '/flashcards': {selected: false, text: "Flashcards", icon: blogIcon},
         // '/articles': {selected: false, text: "Articles", icon: articlesIcon},
         // '/games': {selected: false, text: "Games", icon: gamesIcon}
     })

@@ -208,3 +208,7 @@ b {
     background-image:  linear-gradient(#efefef 2px, transparent 2px), linear-gradient(to right, #efefef 2px, #ffffff 2px);
     background-size: 36px 36px;
 }
+
+.card-input::placeholder {
+    color: #404040;
+}
