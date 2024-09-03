@@ -39,12 +39,27 @@ export default function Page() {
         })
 
         socket.current.on('new-user', (id: any, board: any) => {
-            if (!socketId) {
-                setSocketId(id)
-            }
+            socket.current?.emit('getWhiteboard', (board: any) => {
+                
+            })
+            // // console.log(socketId)
+            // if (socketId) {
+            //     console.log("New user")
+            //     const canvas = canvasRef.current
+            //     if (canvas) {
+            //         const dataURL = canvas.toDataURL('image/png')
+            //         socket.current?.emit('sendWholeCanvas', dataURL)
+            //         console.log("ASS")
+            //     }
+            // }
+            // if (socketId === undefined || socketId === null) {
+            //     console.log("ASSSSS")
+            //     setSocketId(id.id)
+            // }
         })
 
         socket.current.on('getWhiteboard', (board: any) => {
+            console.log("Getting board")
             const canvas = canvasRef.current
             if (canvas) {
                 const context = canvas.getContext('2d')
@@ -58,23 +73,19 @@ export default function Page() {
             }
         })
 
-        socket.current.emit('getWhiteboard', (board: any) => {
-            //
-        })
-
-        socket.current.on('sendWholeCanvas', (data: any) => {
-            const canvas = canvasRef.current
-            if (canvas) {
-                const context = canvas.getContext('2d')
-                if (context) {
-                    const img = new Image()
-                    img.onload = () => {
-                        context.drawImage(img, 0, 0)
-                    }
-                    img.src = data
-                }
-            }
-        })
+        // socket.current.on('sendWholeCanvas', (data: any) => {
+        //     const canvas = canvasRef.current
+        //     if (canvas) {
+        //         const context = canvas.getContext('2d')
+        //         if (context) {
+        //             const img = new Image()
+        //             img.onload = () => {
+        //                 context.drawImage(img, 0, 0)
+        //             }
+        //             img.src = data
+        //         }
+        //     }
+        // })
 
         socket.current.on('canvasData', (data: any) => {
             const canvas = canvasRef.current
@@ -144,6 +155,11 @@ export default function Page() {
     const stopDrawing = () => {
         setIsDrawing(false)
         lastPos = { x: 0, y: 0 }
+        const canvas = canvasRef.current
+        if (canvas) {
+            const dataURL = canvas.toDataURL('image/png')
+            socket.current?.emit('sendWholeCanvas', dataURL)
+        }
     }
     
     const getTouchPos = (event: React.TouchEvent) => {
@@ -162,10 +178,10 @@ export default function Page() {
         const data = {start, end, color, width}
         const canvas = canvasRef.current
         if (canvas) {
-            const dataURL = canvas.toDataURL('image/png')
+            // const dataURL = canvas.toDataURL('image/png')
             // socket.current?.emit('canvasData', dataURL)
             socket.current?.emit('canvasData', {data, socketId})
-            socket.current?.emit('sendWholeCanvas', dataURL)
+            // socket.current?.emit('sendWholeCanvas', dataURL)
         }
         
     }

@@ -44,6 +44,7 @@ app.prepare().then(() => {
 	});
 
     socket.on('getWhiteboard', () => {
+        console.log("Whiteboard: ", whiteboard)
         io.emit('getWhiteboard', whiteboard)
     })
 
