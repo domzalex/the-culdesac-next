@@ -14,6 +14,8 @@ const blogIcon = "M7.2 21C6.07989 21 5.51984 21 5.09202 20.782C4.71569 20.5903 4
 const articlesIcon = "M7 8L3 11.6923L7 16M17 8L21 11.6923L17 16M14 4L10 20"
 const gamesIcon = "M8 8H8.01M16 8H16.01M12 12H12.01M16 16H16.01M8 16H8.01M7.2 20H16.8C17.9201 20 18.4802 20 18.908 19.782C19.2843 19.5903 19.5903 19.2843 19.782 18.908C20 18.4802 20 17.9201 20 16.8V7.2C20 6.0799 20 5.51984 19.782 5.09202C19.5903 4.71569 19.2843 4.40973 18.908 4.21799C18.4802 4 17.9201 4 16.8 4H7.2C6.0799 4 5.51984 4 5.09202 4.21799C4.71569 4.40973 4.40973 4.71569 4.21799 5.09202C4 5.51984 4 6.07989 4 7.2V16.8C4 17.9201 4 18.4802 4.21799 18.908C4.40973 19.2843 4.71569 19.5903 5.09202 19.782C5.51984 20 6.07989 20 7.2 20Z"
 
+const cardIcon = "M11 4H7.2C6.0799 4 5.51984 4 5.09202 4.21799C4.71569 4.40974 4.40973 4.7157 4.21799 5.09202C4 5.51985 4 6.0799 4 7.2V16.8C4 17.9201 4 18.4802 4.21799 18.908C4.40973 19.2843 4.71569 19.5903 5.09202 19.782C5.51984 20 6.0799 20 7.2 20H16.8C17.9201 20 18.4802 20 18.908 19.782C19.2843 19.5903 19.5903 19.2843 19.782 18.908C20 18.4802 20 17.9201 20 16.8V12.5M15.5 5.5L18.3284 8.32843M10.7627 10.2373L17.411 3.58902C18.192 2.80797 19.4584 2.80797 20.2394 3.58902C21.0205 4.37007 21.0205 5.6364 20.2394 6.41745L13.3774 13.2794C12.6158 14.0411 12.235 14.4219 11.8012 14.7247C11.4162 14.9936 11.0009 15.2162 10.564 15.3882C10.0717 15.582 9.54378 15.6885 8.48793 15.9016L8 16L8.04745 15.6678C8.21536 14.4925 8.29932 13.9048 8.49029 13.3561C8.65975 12.8692 8.89125 12.4063 9.17906 11.9786C9.50341 11.4966 9.92319 11.0768 10.7627 10.2373Z"
+
 
 const selectedDivStyle = 'bg-white p-2 flex items-center rounded-lg border border-transparent cursor-pointer hover:border-white dark:hover:border-neutral-800'
 const unSelectedDivStyle = 'p-2 flex items-center rounded-lg border border-transparent cursor-pointer hover:border-white dark:hover:border-neutral-800'
@@ -46,7 +48,7 @@ export default function Nav() {
     const [navLinks, setNavLinks] = useState<NavLinks>({
         '/chat': {selected: false, text: "Chat", icon: chatIcon},
         '/blog': {selected: false, text: "Blog", icon: blogIcon},
-        '/flashcards': {selected: false, text: "Flashcards", icon: blogIcon},
+        '/flashcards': {selected: false, text: "Flashcards", icon: cardIcon},
         // '/articles': {selected: false, text: "Articles", icon: articlesIcon},
         // '/games': {selected: false, text: "Games", icon: gamesIcon}
     })
@@ -82,12 +84,12 @@ export default function Nav() {
             <div className={navToggled ? 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-1 dark:border-b-neutral-800' : 'border-b pb-2 w-full flex items-center justify-center sm:justify-between sm:border-b-0 dark:border-b-neutral-800'}>
                 <Link href="/" onClick={() => handleClick('/')} className='flex flex-col sm:flex-row sm:gap-2 sm:items-end'>
                     <h1 className='text-lg font-light text-white dark:text-neutral-200 text-center sm:text-left'>the</h1>
-                    <h1 className='text-white dark:text-neutral-200 font-black text-3xl text-center'>CUL-DE-SAC</h1>
+                    <h1 className='text-white dark:text-neutral-200 font-black text-3xl text-center flex gap-0.5 items-center'>CUL<div className='w-[10px] h-[10px] rounded-full bg-white'></div>DE<div className='w-[10px] h-[10px] rounded-full bg-white'></div>SAC</h1>
                 </Link>
                 <div className='hidden sm:flex h-6 w-7 cursor-pointer flex flex-col justify-between' onClick={navToggle}>
-                    <div className='bg-white h-[3px] rounded-lg w-full'></div>
-                    <div className='bg-white h-[3px] rounded-lg w-full'></div>
-                    <div className='bg-white h-[3px] rounded-lg w-full'></div>
+                    <div className={navToggled ? 'bg-white h-[3px] rounded-lg w-full rotate-45 translate-y-[9px] transition-all duration-300' : 'bg-white h-[3px] rounded-lg w-full rotate-0 transition-all duration-300'}></div>
+                    <div className={navToggled ? 'bg-white h-[3px] rounded-lg w-full opacity-0 transition-all duration-300' : 'bg-white h-[3px] rounded-lg w-full opacity-100 transition-all duration-300'}></div>
+                    <div className={navToggled ? 'bg-white h-[3px] rounded-lg w-full -rotate-45 -translate-y-3 transition-all duration-300' : 'bg-white h-[3px] rounded-lg w-full rotate-0 transition-all duration-300'}></div>
                 </div>
             </div>
             <div className={navToggled ? navLinksShownStyle : navLinksHiddenStyle}>
@@ -116,8 +118,8 @@ export default function Nav() {
                     </div>
                     <div className='gamesSubTab flex-col w-full items-end gap-6 p-2 pt-20'>
                         <Link href="/games/cookie-clicker" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800' onClick={navToggle}>Cookie Clicker</Link>
-                        {/* <Link href="/games/agario" className='text-white font-light hover:border-b-white' onClick={navToggle}>Agario</Link> */}
-                        {/* <Link href="/games/tic-tac-toe" className='text-white font-light'>Tic-Tac-Toe</Link> */}
+                        <Link href="/games/tic-tac-toe" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800'>Tic-Tac-Toe</Link>
+                        <Link href="/games/whiteboard" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800' onClick={navToggle}>Whiteboard</Link>
                     </div>
                 </div>
                     

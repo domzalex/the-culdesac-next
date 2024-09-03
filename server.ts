@@ -19,6 +19,14 @@ const port = 3000;
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
+
+let teams: any
+let board: any
+let teamToGo: any
+
+let whiteboard: any
+
+
 app.prepare().then(() => {
   const httpServer = createServer(handler);
 
@@ -29,19 +37,44 @@ app.prepare().then(() => {
     io.emit('new-user', user)
     console.log(`WS: Client connected on socket ${socket.id} and user ${user}`)
 
+    io.emit('board', {teams: teams, boardState: board, teamToGo: teamToGo})
+
+    io.emit('canvasData', whiteboard)
+
 	socket.conn.once("upgrade", () => {
 		console.log(`WS: Transport for socket ${socket.id} upgraded to ${socket.conn.transport.name}`);
 	});
 
     socket.on('chat', (data: any) => {
-        // Convert the responseData to a JSON string and send it
         io.emit('chat', JSON.stringify(data))
+    })
+
+    socket.on('canvasData', (data: any) => {
+        whiteboard = data
+        io.emit('canvasData', whiteboard)
+    })
+
+    socket.on('board', (data: any) => {
+        console.log("Received board emit on SERVER", data)
+        teamToGo = data.teamToGo
+        if (data.teams) {
+            teams = data.teams
+        }
+        if (data.boardState) {
+            board = data.boardState
+        }
+        if (data.reset) {
+            teams = undefined
+            board = undefined
+            teamToGo = undefined
+        }
+        io.emit('board', data)
     })
 
 	socket.on("disconnect", (reason: string) => {
 		console.log(`WS: Client disconnected from socket ${socket.id} because ${reason}`)
-	});
-  });
+	})
+  })
 
   httpServer
     .once("error", (err) => {
