@@ -3,7 +3,11 @@
 import React, { useEffect, useState, useRef, use } from 'react'
 import io, { Socket } from 'socket.io-client'
 
+let lastPos = { x: 0, y: 0 }  
+
 export default function Page() {
+
+    const [socketId, setSocketId] = useState(undefined)
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const [isDrawing, setIsDrawing] = useState(false)
@@ -23,6 +27,7 @@ export default function Page() {
                 context.fillRect(0, 0, canvas.width, canvas.height)
                 context.lineWidth = 5
                 context.lineCap = 'round'
+                context.lineJoin = 'round'
                 context.strokeStyle = color
             }
         }
@@ -33,7 +38,31 @@ export default function Page() {
             console.log('Client Connected to WebSocket')
         })
 
-        socket.current.on('canvasData', (data: string) => {
+        socket.current.on('new-user', (id: any, board: any) => {
+            if (!socketId) {
+                setSocketId(id)
+            }
+        })
+
+        socket.current.on('getWhiteboard', (board: any) => {
+            const canvas = canvasRef.current
+            if (canvas) {
+                const context = canvas.getContext('2d')
+                if (context) {
+                    const img = new Image()
+                    img.onload = () => {
+                        context.drawImage(img, 0, 0)
+                    }
+                    img.src = board
+                }
+            }
+        })
+
+        socket.current.emit('getWhiteboard', (board: any) => {
+            //
+        })
+
+        socket.current.on('sendWholeCanvas', (data: any) => {
             const canvas = canvasRef.current
             if (canvas) {
                 const context = canvas.getContext('2d')
@@ -43,6 +72,23 @@ export default function Page() {
                         context.drawImage(img, 0, 0)
                     }
                     img.src = data
+                }
+            }
+        })
+
+        socket.current.on('canvasData', (data: any) => {
+            const canvas = canvasRef.current
+            if (canvas) {
+                const context = canvas.getContext('2d')
+                if (data && context) {
+                    context.strokeStyle = data.data.color
+                    context.lineWidth = data.data.width
+                    context.lineCap = 'round'
+
+                    context.beginPath()
+                    context.moveTo(data.data.start.x, data.data.start.y)
+                    context.lineTo(data.data.end.offsetX, data.data.end.offsetY)
+                    context.stroke()
                 }
             }
         })
@@ -61,8 +107,6 @@ export default function Page() {
                 ? getTouchPos(event)
                 : event.nativeEvent
         
-            context.beginPath()
-            context.moveTo(offsetX, offsetY)
             setIsDrawing(true)
         }
     }
@@ -81,14 +125,25 @@ export default function Page() {
         
             context.strokeStyle = color
             context.lineWidth = width
+            context.lineCap = 'round'
+
+            if (lastPos.x === 0 && lastPos.y === 0) {
+                lastPos = { x: offsetX, y: offsetY }
+            }
+
+            context.beginPath()
+            context.moveTo(lastPos.x, lastPos.y)
             context.lineTo(offsetX, offsetY)
             context.stroke()
-            sendCanvasData()
+            sendCanvasData(lastPos, {offsetX, offsetY}, color, width, socketId)
+
+            lastPos = { x: offsetX, y: offsetY }
         }
     }
     
     const stopDrawing = () => {
         setIsDrawing(false)
+        lastPos = { x: 0, y: 0 }
     }
     
     const getTouchPos = (event: React.TouchEvent) => {
@@ -103,12 +158,16 @@ export default function Page() {
         return { offsetX: 0, offsetY: 0 }
     }
 
-    const sendCanvasData = () => {
+    const sendCanvasData = (start: any, end: any, color: any, width: any, socketId: any) => {
+        const data = {start, end, color, width}
         const canvas = canvasRef.current
         if (canvas) {
             const dataURL = canvas.toDataURL('image/png')
-            socket.current?.emit('canvasData', dataURL)
+            // socket.current?.emit('canvasData', dataURL)
+            socket.current?.emit('canvasData', {data, socketId})
+            socket.current?.emit('sendWholeCanvas', dataURL)
         }
+        
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +176,6 @@ export default function Page() {
     }
 
     const changeWidth = (e: any) => {
-        console.log(e.target.value)
         setWidth(e.target.value)
     }
 
@@ -162,8 +220,8 @@ export default function Page() {
             onTouchStart={startDrawing}
             onTouchMove={draw}
             onTouchEnd={stopDrawing}
-            width={350}
-            height={350}
+            width={1920}
+            height={1080}
             style={{ backgroundColor: 'white', cursor: 'crosshair', border: 'none', margin: '6em 0 0 0', borderRadius: '10px' }}
             ></canvas>
         </div>

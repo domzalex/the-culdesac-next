@@ -34,24 +34,31 @@ app.prepare().then(() => {
 
   io.on("connection", (socket: any) => {
     const { user } = socket.handshake.query
-    io.emit('new-user', user)
+    io.emit('new-user', {id: socket.id, board: whiteboard})
     console.log(`WS: Client connected on socket ${socket.id} and user ${user}`)
 
     io.emit('board', {teams: teams, boardState: board, teamToGo: teamToGo})
 
-    io.emit('canvasData', whiteboard)
-
 	socket.conn.once("upgrade", () => {
 		console.log(`WS: Transport for socket ${socket.id} upgraded to ${socket.conn.transport.name}`);
 	});
+
+    socket.on('getWhiteboard', () => {
+        io.emit('getWhiteboard', whiteboard)
+    })
 
     socket.on('chat', (data: any) => {
         io.emit('chat', JSON.stringify(data))
     })
 
     socket.on('canvasData', (data: any) => {
+        io.emit('canvasData', data)
+    })
+
+    socket.on('sendWholeCanvas', (data: any) => {
+        console.log("Sending whole board")
         whiteboard = data
-        io.emit('canvasData', whiteboard)
+        // io.emit('sendWholeCanvas', whiteboard)
     })
 
     socket.on('board', (data: any) => {
