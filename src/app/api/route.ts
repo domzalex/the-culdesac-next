@@ -8,23 +8,23 @@ export async function GET(req: NextRequest) {
     // const user = new URL(req.url).searchParams.get('user')
     const id = new URL(req.url).searchParams.get('_id')
 
-    console.log(id)
+    // console.log(id)
     
     const db = await clientPromise()
 
     let allPosts
 
     if (tag !== 'null' && tag !== null && tag && id == null) {
-        console.log("All posts by tag")
+        // console.log("All posts by tag")
         allPosts = await db.collection('newblogentries').find({ tag: tag }).sort({ _id: -1 }).toArray()
     }
     if (id != null) {
-        console.log("One post with id: ", id)
+        // console.log("One post with id: ", id)
         allPosts = await db.collection('newblogentries').find({ _id: new ObjectId(id) }).toArray()
-        console.log(allPosts[0].date)
+        // console.log(allPosts[0].date)
     }
     else {
-        console.log("All posts")
+        // console.log("All posts")
         allPosts = await db.collection('newblogentries').find({}).sort({ _id: -1 }).toArray()
     }
 

@@ -57,13 +57,13 @@ app.prepare().then(() => {
     })
 
     socket.on('sendWholeCanvas', (data: any) => {
-        console.log("Sending whole board")
+        // console.log("Sending whole board")
         whiteboard = data
         // io.emit('sendWholeCanvas', whiteboard)
     })
 
     socket.on('board', (data: any) => {
-        console.log("Received board emit on SERVER", data)
+        // console.log("Received board emit on SERVER", data)
         teamToGo = data.teamToGo
         if (data.teams) {
             teams = data.teams
