@@ -118,7 +118,7 @@ export default function Nav() {
                     </div>
                     <div className='gamesSubTab flex-col w-full items-end gap-6 p-2 pt-20'>
                         <Link href="/games/cookie-clicker" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800' onClick={navToggle}>Cookie Clicker</Link>
-                        <Link href="/games/tic-tac-toe" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800'>Tic-Tac-Toe</Link>
+                        <Link href="/games/tic-tac-toe" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800' onClick={navToggle}>Tic-Tac-Toe</Link>
                         <Link href="/games/whiteboard" className='text-white dark:text-neutral-400 font-light hover:border-b-white dark:hover:border-b-neutral-800' onClick={navToggle}>Whiteboard</Link>
                     </div>
                 </div>

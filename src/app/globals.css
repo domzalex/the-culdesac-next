@@ -212,3 +212,231 @@ b {
 .card-input::placeholder {
     color: #404040;
 }
+
+#card {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    aspect-ratio: 3/2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    perspective: 1000px;
+    gap: 2em;
+}
+
+#card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: 0.7s ease;
+    transform-style: preserve-3d;
+    border: solid 1px rgb(60,60,60);
+    border-radius: 5px;
+    background-color: rgb(23,23,23);
+}
+
+#card-front, #card-back {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+
+#card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+/* #card:hover #card-inner {
+    transform: rotateY(180deg);
+} */
+
+.card-hover {
+    transform: rotateY(180deg);
+}
+
+#card-back-header {
+    color: rgb(60,60,60);
+    border-bottom: solid 1px rgb(60,60,60);
+    width: 100%;
+    padding: 0.5em 0;
+    margin: 0;
+}
+
+#card-back-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    /* gap: 1em; */
+    height: 100%;
+}
+
+.correct {
+    color: #16a34a;
+}
+
+.incorrect {
+    color: #dc2626;
+    text-decoration: line-through;
+}
+
+.delete-card-button {
+    background-color: #dc2626;
+    color: white;
+    width: 33px;
+    height: 33px;
+    text-align: center;
+    line-height: 33px;
+    border-radius: 100%;
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    font-weight: bold;
+}
+
+#alert-container {
+    width: 100vw;
+    height: 100vh;
+    padding: 1em;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.alert-box {
+    width: 100%;
+    max-width: 800px;
+    aspect-ratio: 6/5;
+    border-radius: 5px;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em;
+    border: solid 1px rgb(60,60,60);
+}
+
+.alert-box-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.alert-box-h1 {
+    font-weight: bold;
+    font-size: 1.75em;
+    text-align: center;
+}
+
+.card-info {
+    margin: 0;
+    font-size: 2.5em;
+    /* color: white; */
+}
+
+.alert-delete-confirm, .alert-delete-deny {
+    border-radius: 50px;
+    padding: 0.5em 1.25em;
+    font-size: 1.25em;
+    color: white;
+    font-weight: bold;
+}
+
+.alert-delete-confirm {
+    background-color: #dc2626;
+}
+
+.alert-delete-deny {
+    background-color: transparent;
+    border: solid 1px rgb(60,60,60);
+}
+
+#card-check-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+}
+
+#submit-card-check {
+    border: none;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: transparent;
+    font-size: 1.5em;
+    padding: 8px;
+    width: 33%;
+}
+
+.card-grid-item {
+    border: none;
+    font-size: 1em;
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+    min-width: 47px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    /* flex: auto; if I want them to grow */
+}
+.card-grid-item:hover {
+    background-color: rgb(30,30,30);
+}
+
+#card-grid-item-h3 {
+    text-align: center;
+    margin: 0;
+    padding: 0.5rem;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: solid 1px rgb(60,60,60);
+    border-bottom: none;
+    line-height: normal;
+}
+
+#percent-correct, #percent-incorrect {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem;
+}
+
+#percent-correct {
+    color: #16a34a;
+}
+
+#percent-incorrect {
+    color: #dc2626;
+    border-left: solid 1px rgb(60,60,60);
+}
+
+#card-grid-percent-outer {
+    height: 3px;
+    width: 100%;
+    background-color: rgb(60,60,60);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    overflow: hidden;
+}

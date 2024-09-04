@@ -57,7 +57,7 @@ const CreateFlashcard = () => {
 
     return (
         <div className='flex-1 relative flex flex-col chatBg'>
-            <div className="w-full flex-1 flex flex-col items-center justify-center sm:justify-start gap-3 p-3 pt-[64px]">
+            <div className="w-full flex-1 flex flex-col items-center justify-center sm:justify-center gap-3 p-3 pt-[64px]">
                 <div className="card bg-[#191919] w-full max-w-[500px] aspect-[3/2] rounded flex flex-col justify-evenly items-center">
                     <input className="bg-transparent text-2xl text-neutral-200 card-input text-center border-b border-b-neutral-700 font-light px-2 py-1 rounded-none" placeholder="Learning Language" value={learningLanguage} onChange={(e) => {setLearningLanguage(e.target.value)}}/>
                     <input className="bg-transparent text-2xl text-neutral-200 card-input text-center border-b border-b-neutral-700 font-light px-2 py-1 rounded-none" placeholder="Native Language" value={nativeLanguage} onChange={(e) => {setNativeLanguage(e.target.value)}}/>

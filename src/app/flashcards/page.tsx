@@ -29,15 +29,43 @@ const Flashcards = () => {
     }, [])
 
     return (
-        <div className='bg-gray-100 dark:bg-neutral-800 flex-1 relative flex flex-col chatBg'>
+        <div className='flex-1 relative flex flex-col chatBg'>
             <div className="w-full flex flex-wrap gap-3 p-3 pt-[64px]">
                 {flashcards ? (
                     <>
-                        {flashcards.map((card, index) => {
+                        {/* {flashcards.map((card, index) => {
                             return (
-                                <Link key={index} href={"/"} className="card-link rounded-md border border-neutral-600 px-2 py-1">
+                                <Link key={index} href={`/flashcards/${card.learningLanguage}`} className="card-link rounded-md border border-neutral-600 px-2 py-1">
                                     <h1 className="text-neutral-300">{card.learningLanguage}</h1>
                                     <div className="card-progress"></div>
+                                </Link>
+                            )
+                        })} */}
+                        {flashcards.map((card) => {
+                            let percent = 0
+                            if (card.numberIncorrect != 0 && card.numberCorrect == 0) {
+                                percent = 0
+                            }
+                            if (card.numberIncorrect == 0 && card.numberCorrect > 0) {
+                                percent = 100
+                            }
+                            if (card.numberIncorrect != 0 && card.numberCorrect != 0) {
+                                percent = (card.numberCorrect / (card.numberCorrect + card.numberIncorrect) * 100)
+                            }
+
+                            return (
+                                <Link key={card.id} href={`/flashcards/${card.learningLanguage}`} className="card-grid-item bg-neutral-800">
+                                    <h3 id='card-grid-item-h3' className="text-blue-500 font-bold">{card.learningLanguage}</h3>
+                                    <div id='card-grid-percent-outer'>
+                                        <div
+                                            id='card-grid-percent-inner'
+                                            style={{ width: `${percent}%`, backgroundColor: `rgb(10, 132, 255)`, height: `100%` }}
+                                        >
+                                            {/* <p id='percent-correct'>{(card.numberCorrect / (card.numberCorrect + card.numberIncorrect) * 100).toFixed(2) + '%'}</p>
+                                            <p id='percent-incorrect'>{(card.numberIncorrect / (card.numberCorrect + card.numberIncorrect) * 100).toFixed(2) + '%'}</p> */}
+
+                                        </div>
+                                    </div>
                                 </Link>
                             )
                         })}
