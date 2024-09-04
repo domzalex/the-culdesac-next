@@ -70,25 +70,7 @@ const Page = () => {
     }
 
     const newCard = () => {
-        // setChecked(false)
-        // setCard({
-        //     id: '',
-        //     learningLanguage: '',
-        //     nativeLanguage: '',
-        //     numberCorrect: 0,
-        //     numberIncorrect: 0
-        // })
         let n = Math.floor(Math.random() * flashcards.length)
-        // setTimeout(() => {
-        //     setCard({
-        //         id: flashcards[n].id,
-        //         learningLanguage: flashcards[n].learningLanguage,
-        //         nativeLanguage: flashcards[n].nativeLanguage,
-        //         numberCorrect: flashcards[n].numberCorrect,
-        //         numberIncorrect: flashcards[n].numberIncorrect
-        //     })
-        // }, 500)
-        // setValueToCheck('')
         router.push(`/flashcards/${flashcards[n].learningLanguage}`)
     }
 
@@ -110,7 +92,7 @@ const Page = () => {
                     <div id='card-inner' className={checked ? 'card-hover' : 'none'}>
                         <div id='card-front'>
                             <h1 className="card-info text-white">{card?.learningLanguage}</h1>
-                            <button className='delete-card-button' onClick={() => setAlert(true)}>x</button>
+                            <button className='absolute bottom-3 right-3 bg-red-600 rounded-full rotate-45 text-white font-bold text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
                         </div>
                         <div id='card-back'>
                             <h1 id='card-back-header'>
@@ -120,7 +102,7 @@ const Page = () => {
                                 <h1 className="card-info text-white">{card?.nativeLanguage}</h1>
                                 <h1 className={isCorrect ? 'card-info text-green-500' : 'card-info text-red-500 line-through'}>{valueToCheck.charAt(0).toUpperCase() + valueToCheck.slice(1)}</h1>
                             </div>
-                            <button className='delete-card-button' onClick={() => setAlert(true)}>x</button>
+                            <button className='absolute bottom-3 right-3 bg-red-600 rounded-full rotate-45 text-white font-bold text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
                         </div>
                     </div>
                 </div>
