@@ -79,6 +79,19 @@ app.prepare().then(() => {
         io.emit('board', data)
     })
 
+
+
+
+
+    socket.on('enemyMonster', (data: {id: string, monster: object}) => {
+        // console.log(id, monster)
+        io.emit('enemyMonster', {data})
+    })
+
+
+
+
+
 	socket.on("disconnect", (reason: string) => {
 		console.log(`WS: Client disconnected from socket ${socket.id} because ${reason}`)
 	})

@@ -440,3 +440,52 @@ b {
     border-bottom-right-radius: 5px;
     overflow: hidden;
 }
+
+.invader-dead {
+    opacity: 0;
+}
+
+.invader {
+    background-image: url('/luis_minion.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.player, .player-hurt {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.player {
+    background-image: url('/luis-normal.webp');
+}
+
+.player-good {
+    background-image: url('/luis-good.webp');
+}
+
+.player-hurt {
+    background-image: url('/luis-hurt.webp');
+}
+
+.publixBg {
+    background-image: url('/images/publix.jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+.battle-monster-image {
+    image-rendering: pixelated;
+}
+
+
+@font-face {
+    font-family: 'pokemon';
+    src: url('/pokemon_fire_red.ttf');
+}
+
+.battle-monster-container * {
+    font-family: 'pokemon';
+}

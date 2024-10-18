@@ -10,11 +10,18 @@ export default function Page() {
     const [socketId, setSocketId] = useState(undefined)
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
+    const cursorWidth = useRef<HTMLDivElement | null>(null)
     const [isDrawing, setIsDrawing] = useState(false)
+    const [isDraw, setIsDraw] = useState(true)
     const [isEraser, setIsEraser] = useState(false)
+    const [isSelect, setIsSelect] = useState(false)
     const [color, setColor] = useState('#000000')
     const [tempColor, setTempColor] = useState('#000000')
     const [width, setWidth] = useState(5)
+    const [cursor, setCursor] = useState({
+        x: 0,
+        y: 0
+    })
 
     const socket = useRef<Socket | null>(null)
 
@@ -107,12 +114,28 @@ export default function Page() {
         return () => {
             socket.current?.disconnect()
         }
+
+    }, [])
+
+    useEffect(() => {
+        const moveCursor = (e: any) => {
+            if (cursorWidth) {
+                setCursor({ x: ((e.clientX - 256)), y: (e.clientY) })
+                // console.log(e)
+            }
+        }
+        window.addEventListener('mousemove', (e: any) => {
+            moveCursor(e)
+        })
+        window.addEventListener('touchmove', (e: any) => {
+            moveCursor(e)
+        })
     }, [])
     
     const startDrawing = (event: React.MouseEvent | React.TouchEvent) => {
         const canvas = canvasRef.current
         const context = canvas?.getContext('2d')
-        if (canvas && context) {
+        if (canvas && context && (isDraw || isEraser)) {
             const { offsetX, offsetY } =
                 'touches' in event
                 ? getTouchPos(event)
@@ -169,6 +192,7 @@ export default function Page() {
             const touch = event.touches[0]
             const offsetX = touch.clientX - rect.left
             const offsetY = touch.clientY - rect.top
+            setCursor({ x: offsetX, y: offsetY })
             return { offsetX, offsetY }
         }
         return { offsetX: 0, offsetY: 0 }
@@ -213,19 +237,20 @@ export default function Page() {
 
     return (
         <div className='flex-1 chatBg h-full relative flex flex-col items-center justify-center overflow-hidden'>
-            <div className='absolute top-3 sm:top-16 left-3 flex items-center gap-3'>
-                <button className={isEraser ? 'text-4xl opacity-25' : 'text-4xl opacity-100'} onClick={() => {setColor(tempColor); setIsEraser(false)}}>🖊️</button>
-                <button className={isEraser ? 'text-4xl opacity-100' : 'text-4xl opacity-25'} onClick={() => {setEraser(); setIsEraser(true)}}>🧼</button>
+            <div className='absolute top-3 sm:top-16 left-3 flex items-center gap-3 w-full'>
+                <button className={isEraser || isSelect ? 'text-2xl opacity-25' : 'text-2xl opacity-100'} onClick={() => {setColor(tempColor); setIsEraser(false); setIsDraw(true); setIsSelect(false)}}>🖊️</button>
+                <button className={isEraser ? 'text-2xl opacity-100' : 'text-2xl opacity-25'} onClick={() => {setEraser(); setIsSelect(false); setIsEraser(true)}}>🧼</button>
+                <button className={isSelect ? 'bg-white text-2xl opacity-100 border border-2 border-dotted border-black w-[25px] h-[25px]' : 'bg-white text-2xl opacity-25 border border-2 border-dotted border-black w-[25px] h-[25px]'} onClick={() => {setIsSelect(true); setIsEraser(false); setIsDraw(false)}}></button>
                 <input
                     className='ml-1'
                     type="color"
                     value={color}
                     onChange={handleChange}
 
-                    style={{ width: '35px', height: '35px', border: 'none', padding: '0' }}
+                    style={{ width: '25px', height: '25px', border: 'none', padding: '0' }}
                 />
-                <input type="range" min={2} max={50} step={2} onChange={(e) => changeWidth(e)} />
-                <button onClick={saveCanvasAsImage} className='text-4xl ml-1'>💾</button>
+                <input type="range" min={2} max={250} step={2} onChange={(e) => changeWidth(e)} />
+                <button onClick={saveCanvasAsImage} className='text-2xl ml-1'>💾</button>
             </div>
             <canvas
             ref={canvasRef}
@@ -236,10 +261,11 @@ export default function Page() {
             onTouchStart={startDrawing}
             onTouchMove={draw}
             onTouchEnd={stopDrawing}
-            width={1920}
-            height={1080}
+            width={1000}
+            height={1000}
             style={{ backgroundColor: 'white', cursor: 'crosshair', border: 'none', margin: '6em 0 0 0', borderRadius: '10px' }}
             ></canvas>
+            <div ref={cursorWidth} className='absolute rounded-full pointer-events-none' style={{ width: `${width}px`, height: `${width}px`, top: `${cursor.y - (width / 2)}px`, left: `${cursor.x - (width / 2)}px`, borderWidth: '1px', borderStyle: 'solid', borderColor: isDraw || isEraser ? '#ddd' : 'transparent' }}></div>
         </div>
     )
 }
