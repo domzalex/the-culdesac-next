@@ -6,7 +6,7 @@ import Register from '../components/Register'
 export default function Page() {
     return (
         <Suspense fallback={<div>Loading...</div>}>
-
+            {/* <Register /> */}
         </Suspense>
     )
 }

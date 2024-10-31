@@ -60,6 +60,11 @@ html {
 }
 
 
+nav {
+    z-index: 20 !important;
+}
+
+
 .lds-ripple,
 .lds-ripple div {
   box-sizing: border-box;
@@ -480,6 +485,94 @@ b {
     image-rendering: pixelated;
 }
 
+
+.alertPane {
+    transition: all 500ms ease;
+    z-index: 10 !important;
+}
+
+.alertActive {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.alertInactive {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.stat-pane, .start-btn {
+    z-index: 10 !important;
+}
+
+
+
+/* #game-board {
+    background-image: url('/images/td-map-1.png');
+    background-position: initial;
+    background-size: contain;
+} */
+
+.oldMan {
+    background-image: url('/oldman.webp');
+    background-size: cover;
+}
+.chan {
+    background-image: url('/chan.webp');
+    background-size: cover;
+}
+.luis {
+    background-image: url('/luis.webp');
+    background-size: cover;
+}
+.angel {
+    background-image: url('/angel.webp');
+    background-size: cover;
+}
+.joel {
+    background-image: url('/joel.webp');
+    background-size: cover;
+}
+.alex {
+    background-image: url('/alex.webp');
+    background-size: cover;
+}
+
+
+/* .tower-stats {
+    display: none;
+    pointer-events: none;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+} */
+
+/* .tower-tab:hover .tower-stats {
+    display: flex;
+} */
+
+
+#map1 {
+    background-image: url('/images/td-map-new-1.png');
+    background-position: initial;
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+#map2 {
+    background-image: url('/images/td-map-new-2.png');
+    background-position: initial;
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+#map3 {
+    background-image: url('/images/td-map-new-3.png');
+    background-position: initial;
+    background-size: contain;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
 
 @font-face {
     font-family: 'pokemon';
