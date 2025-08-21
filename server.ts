@@ -9,8 +9,9 @@ Refs:
 import { createServer } from "node:http";
 import next from "next";
 import { Server } from "socket.io"
+import { setIO } from "./src/lib/socket";
 
-require('dotenv').config()
+const youtubedl = require('youtube-dl-exec')
 
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
@@ -31,6 +32,7 @@ app.prepare().then(() => {
   const httpServer = createServer(handler);
 
   const io = new Server(httpServer);
+//   setIO(httpServer)
 
   io.on("connection", (socket: any) => {
     const { user } = socket.handshake.query
@@ -86,6 +88,15 @@ app.prepare().then(() => {
     socket.on('enemyMonster', (data: {id: string, monster: object}) => {
         // console.log(id, monster)
         io.emit('enemyMonster', {data})
+    })
+
+
+
+
+    socket.on('progress', (prog: any) => {
+        console.log("CONNECTED TO PROGRESS")
+
+        io.emit("progress", prog.toString())
     })
 
 

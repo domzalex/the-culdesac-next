@@ -41,6 +41,14 @@ interface Enemy {
     color: string
 }
 
+type Projectile = {
+    pos: { x: number, y: number },
+    targetPos: { x: number, y: number },
+    speed: number,
+    damage: number,
+    collided: boolean
+}
+
 interface Map {
     collisions: number[],
     pathPoints: {x: number, y: number}[],
@@ -270,6 +278,8 @@ const Page = () => {
     const enemyTotal = useRef(0)
     const enemyOnScreen = useRef(1)
     const enemySpawnIterator = useRef(0)
+
+    const [projectiles, setProjectiles] = useState<Projectile[]>([])
 
     const [alertShown, setAlertShown] = useState({ enabled: false, type: '', message: '' })
 
@@ -532,6 +542,123 @@ const Page = () => {
         })
     }
 
+    // const targetAndAttackEnemy = (deltaTime: number) => {
+    //     setPlacedTowers((prevTowers) => {
+    //         return prevTowers.map((tower) => {
+    //             const t = {
+    //                 pos: tower.pos,
+    //                 radius: (tower.range * ratio),
+    //             }
+    
+    //             if (tower.lastAttackTime === undefined) {
+    //                 tower.lastAttackTime = 0
+    //             }
+    
+    //             tower.lastAttackTime += deltaTime
+    
+    //             if (tower.lastAttackTime >= tower.attackSpeed) {
+    //                 setEnemies((prevEnemies) => {
+    //                     const targetEnemy = prevEnemies.find((enemy) => {
+    //                         const e = {
+    //                             pos: enemy.pos,
+    //                             radius: enemy.radius,
+    //                         }
+    //                         return isColliding(e, t)
+    //                     })
+    
+    //                     if (targetEnemy) {
+    //                         // Create a projectile aimed at the target enemy
+    //                         setProjectiles((prevProjectiles) => [
+    //                             ...prevProjectiles,
+    //                             {
+    //                                 pos: { 
+    //                                     x: tower.pos.x + (32 * ratio) - 12.5,
+    //                                     y: tower.pos.y + (32 * ratio) - 12.5
+    //                                 },
+    //                                 targetPos: { 
+    //                                     x: targetEnemy.pos.x + (32 * ratio) - 12.5,
+    //                                     y: targetEnemy.pos.y + (32 * ratio) - 12.5
+    //                                 },
+    //                                 speed: 400,
+    //                                 damage: 1,
+    //                                 collided: false
+    //                             },
+    //                         ])
+    
+    //                         // Reset the last attack time after firing
+    //                         tower.lastAttackTime = 0
+    //                     }
+    
+    //                     return prevEnemies
+    //                 })
+    //             }
+    
+    //             return tower
+    //         })
+    //     })
+    // }
+    
+    // Function to update projectiles and check for collisions with enemies
+    // const updateProjectiles = (deltaTime: number) => {
+    //     setProjectiles((prevProjectiles) => {
+    //         return prevProjectiles.map((projectile) => {
+    //             const direction = {
+    //                 x: projectile.targetPos.x - projectile.pos.x,
+    //                 y: projectile.targetPos.y - projectile.pos.y,
+    //             }
+    //             const magnitude = Math.sqrt(direction.x ** 2 + direction.y ** 2)
+    //             const normalizedDirection = {
+    //                 x: direction.x / magnitude,
+    //                 y: direction.y / magnitude,
+    //             }
+    
+    //             projectile.pos.x += normalizedDirection.x * projectile.speed * deltaTime
+    //             projectile.pos.y += normalizedDirection.y * projectile.speed * deltaTime
+
+    //             let collided = false
+    //             setEnemies((prevEnemies) => {
+    //                 return prevEnemies.map((enemy) => {
+    //                     const e = {
+    //                         pos: enemy.pos,
+    //                         radius: enemy.radius,
+    //                     }
+    //                     const p = {
+    //                         pos: projectile.pos,
+    //                         radius: 12.5,
+    //                     }
+    
+    //                     if (isColliding(e, p)) {
+    //                         const newHp = enemy.hp - 1
+    //                         if (newHp <= 0) {
+    //                             enemyTotal.current -= 0.5
+    //                             enemyOnScreen.current -= 0.5
+    //                             setPlayerStats((prev) => ({
+    //                                 ...prev,
+    //                                 money: prev.money + enemy.money,
+    //                             }))
+    //                         }
+    //                         projectile.collided = true;
+    //                         collided = true
+    //                         return {
+    //                             ...enemy,
+    //                             hp: newHp,
+    //                         }
+    //                     }
+    //                     return enemy
+    //                 }).filter((enemy) => enemy.hp > 0)
+    //             })
+
+    //             // Remove projectiles that have reached their target
+    //             if (projectile.collided || magnitude < 10) {
+    //                 return null
+    //             }
+    
+    //             return projectile
+    //         }).filter((proj): proj is Projectile => proj !== null)
+    
+    //     })
+    // }
+
 
 
 
@@ -595,6 +722,8 @@ const Page = () => {
             }))
         }
     }
+
+
 
 
 
@@ -782,6 +911,7 @@ const Page = () => {
         moveEnemies(deltaTime)
         spawnEnemies(deltaTime)
         targetAndAttackEnemy(deltaTime)
+        // updateProjectiles(deltaTime)
     }
 
     // main game loop that tracks deltaTime and calls updateGame
@@ -952,6 +1082,18 @@ const Page = () => {
                         if (container) {
                             return (
                                 <div key={index} className="flex items-center justify-center rounded-full absolute border-2 border-neutral-800 overflow-hidden" style={{ backgroundColor: `${enemy.color}`, top: `${enemy.pos.y}px`, left: `${enemy.pos.x}px`, boxShadow: `0px 0px 5px 2px rgba(0,0,0,0.15)`, width: `${(container.height) * 0.083}px`, aspectRatio: '1/1' }}><h1 className="font-bold text-neutral-200 sm:text-xs z-10">{enemy.hp}</h1>
+                                </div>
+                            )
+                        }
+                    })}
+                </div>
+
+                <div id="projectiles">
+                    {projectiles.map((proj, index) => {
+                        const container = mainBoard.current?.getBoundingClientRect()
+                        if (container) {
+                            return (
+                                <div key={index} className="flex items-center justify-center rounded-full absolute border-2 border-neutral-800 overflow-hidden" style={{ backgroundColor: `black`, top: `${proj.pos.y}px`, left: `${proj.pos.x}px`, boxShadow: `0px 0px 5px 2px rgba(0,0,0,0.15)`, width: `${(container.height) * 0.033}px`, aspectRatio: '1/1' }}>
                                 </div>
                             )
                         }

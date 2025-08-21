@@ -1,15 +1,23 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import System from './components/System'
+import Ytdl from './components/Ytdl'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
+    const { data: session, status } = useSession()
 
     return (
         <div className='bg-gray-100 flex-1 relative flex flex-col sm:items-center chatBg'>
             <div className='flex sm:h-full sm:flex-col p-3 sm:p-3 gap-3 sm:pt-16 overflow-y-scroll'>
 
+                {session && session.user ? (
+                    <Ytdl />
+                ) : (
+                    <></>
+                )}
                 <System />
 
                 <div id='news' className='flex flex-col bg-neutral-800 border border-neutral-700 w-1/3 sm:w-full h-[350px] sm:h-1/2 max-w-[600px] rounded overflow-hidden'>
