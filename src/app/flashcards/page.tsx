@@ -36,7 +36,7 @@ const Flashcards = () => {
 
     return (
         <div className='flex-1 relative flex flex-col chatBg'>
-            <div className="w-full pt-[64px] flex flex-col gap-12 p-3">
+            <div className="w-full mt-[52px] flex flex-col gap-12 p-3 overflow-y-scroll">
                 {flashcards ? (
                     <Collapsible title="All Cards" open={true}>
                         {flashcards.map((card) => {
