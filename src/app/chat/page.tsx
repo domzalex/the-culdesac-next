@@ -260,7 +260,7 @@ export default function Page() {
                                                     <Image loader={imageLoader} src={message.image} alt="" width={250} height={250} className='rounded-lg mb-1'/>
                                                 )}
                                                 {message.messageText && (
-                                                    <p className={`inline-block p-1.5 px-3 rounded-lg ${isUserMessage ? 'bg-blue-500 dark:bg-blue-800 text-white dark:text-neutral-100' : 'bg-gray-200 dark:bg-neutral-700 text-black dark:text-neutral-300'} max-w-[800px] sm:max-w-64`}>
+                                                    <p className={`inline-block p-1.5 px-3 rounded-lg ${isUserMessage ? 'bg-blue-500 dark:bg-blue-800 text-white dark:text-neutral-100' : 'bg-gray-200 dark:bg-neutral-800 text-black dark:text-neutral-300'} max-w-[800px] sm:max-w-64`}>
                                                         {message.messageText}
                                                     </p>
                                                 )}
@@ -273,7 +273,7 @@ export default function Page() {
                         ) : ( <div></div> )}
                     </div>
 
-                    <div className='w-full h-32 bg-white dark:bg-neutral-900 border-t dark:border-t-transparent flex items-center justify-center p-3 gap-3 sm:h-16 relative'>
+                    <div className='w-full h-32 bg-white dark:bg-neutral-900 border-t dark:border-t-neutral-800 flex items-center justify-center p-3 gap-3 sm:h-16 relative'>
                         {!session ? (
                             <div className='absolute top-[-25px] left-0 w-full text-center'>
                                 {/* <h1 className='text-gray-300 dark:text-neutral-600 font-light text-xs translate-y-[8px]'>If you are not logged in, your messages will not persist.</h1> */}

@@ -18,7 +18,7 @@ export default function Search({ text, func, currentUser }: SearchProps) {
     }
 
     return (
-        <div className='w-full h-[52px] bg-white dark:bg-neutral-900 border-b dark:border-b-transparent flex items-center justify-between px-6 sm:px-3'>
+        <div className='w-full h-[52px] bg-white dark:bg-neutral-900 border-b dark:border-b-neutral-800 flex items-center justify-between px-6 sm:px-3'>
             <div className='flex gap-3 items-center sm:w-full'>
                 <input type="text" name="search" placeholder={text} autoCapitalize='off' autoCorrect='off' className='border p-1 px-2 rounded-lg dark:text-neutral-300 dark:bg-neutral-800 dark:border-transparent' value={tagFilter} onChange={handleChange} />
                 <button className='bg-black text-white dark:text-neutral-200 font-bold text-sm px-4 py-1 rounded-full hover:bg-blue-500' onClick={() => func(tagFilter)}>Filter</button>

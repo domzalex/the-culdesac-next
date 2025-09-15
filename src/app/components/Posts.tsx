@@ -87,14 +87,14 @@ export default function Posts({ tag, userLoggedIn }: { tag: string, userLoggedIn
                     </div>
                 ) : (
                     filteredPosts.length > 0 ? (filteredPosts.map((post, index) => (
-                        <div key={index} className='p-8 py-12 flex flex-col gap-5 bg-white dark:bg-neutral-800 sm:px-3 relative'>
+                        <div key={index} className='p-8 py-12 flex flex-col gap-5 bg-white dark:bg-neutral-900 sm:px-3 relative'>
                             <div className='flex flex-col items-start gap-1'>
                                 <div className='flex items-center gap-2 sm:w-full sm:items-end sm:gap-1'>
                                     <h1 className='font-bold sm:text-xl dark:text-neutral-200'>{post.title} <span className='font-light text-gray-400 text-xs pt-1 sm:pb-0.5 px-1'> by </span><span className='text-blue-500'> {post.name}</span></h1>
                                 </div>
                                 <div className='sm:w-full flex items-center gap-3'>
                                     <h2 className='font-light text-gray-400 dark:text-neutral-500 text-xs'>{post.date}</h2>
-                                    <h2 className='font-light text-gray-400 text-xs bg-gray-200 dark:bg-neutral-700 p-1 px-2 rounded-full'>{post.tag.toLowerCase()}</h2>
+                                    <h2 className='font-light text-gray-400 text-xs bg-gray-200 dark:bg-neutral-800 p-1 px-2 rounded-full'>{post.tag.toLowerCase()}</h2>
                                 </div>
                             </div>
                             <div className='font-light text-sm whitespace-pre-wrap max-w-[800px] dark:text-neutral-400' dangerouslySetInnerHTML={{ __html: post.content }} />

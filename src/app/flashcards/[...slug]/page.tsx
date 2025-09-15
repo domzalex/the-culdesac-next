@@ -87,12 +87,13 @@ const Page = () => {
 
     return (
         <div className='flex-1 relative flex flex-col chatBg'>
-            <div className="w-full flex-1 flex flex-col items-center justify-center sm:justify-center gap-3 p-3 pt-[64px]">
+            <a href="/flashcards" className="fixed top-[64px] left-3 text-neutral-600 font-bold underline">Back</a>
+            <div className="w-full flex-1 flex flex-col items-center justify-center sm:justify-start gap-3 p-3 pt-[104px]">
                 <div id='card'>
                     <div id='card-inner' className={checked ? 'card-hover' : 'none'}>
                         <div id='card-front'>
                             <h1 className="card-info text-white">{card?.learningLanguage}</h1>
-                            <button className='absolute bottom-3 right-3 bg-red-600 rounded-full rotate-45 text-white font-bold text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
+                            <button className='absolute bottom-1 right-1 rotate-45 text-neutral-600 font-light text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
                         </div>
                         <div id='card-back'>
                             <h1 id='card-back-header'>
@@ -102,18 +103,18 @@ const Page = () => {
                                 <h1 className="card-info text-white">{card?.nativeLanguage}</h1>
                                 <h1 className={isCorrect ? 'card-info text-green-500' : 'card-info text-red-500 line-through'}>{valueToCheck.charAt(0).toUpperCase() + valueToCheck.slice(1)}</h1>
                             </div>
-                            <button className='absolute bottom-3 right-3 bg-red-600 rounded-full rotate-45 text-white font-bold text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
+                            <button className='absolute bottom-1 right-1 rotate-45 text-neutral-600 font-light text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
                         </div>
                     </div>
                 </div>
                 {!checked ? (
-                    <div id='card-check-container'>
-                        <input className="bg-transparent text-2xl text-neutral-200 card-input text-center border-b border-b-neutral-700 font-light px-2 py-1 rounded-none" placeholder='What is this in English?' onChange={(e) => {setValueToCheck(e.target.value)}} />
-                        <button className="bg-blue-700 text-white rounded px-2 py-1 font-bold w-1/3 max-w-[500px]" onClick={checkCard}>Submit</button>
+                    <div id='card-check-container' className='flex gap-3'>
+                        <input className="flex-1 bg-transparent text-xl text-neutral-200 card-input text-center border border-neutral-700 font-light px-2 py-1 rounded" placeholder='What is this in English?' onChange={(e) => {setValueToCheck(e.target.value)}} />
+                        <button className="flex-1 bg-blue-700 text-white rounded px-3 py-2 font-bold" onClick={checkCard}>Submit</button>
                     </div>
                 ) : (
                     <div id='card-check-container'>
-                        <button className="bg-blue-700 text-white rounded px-2 py-1 font-bold w-1/3 max-w-[500px]" onClick={newCard}>New Card</button>
+                        <button className="bg-blue-700 text-white rounded px-3 py-2 font-bold w-max" onClick={newCard}>New Card</button>
                     </div>
                 )}
             </div>
