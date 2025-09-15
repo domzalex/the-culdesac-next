@@ -70,38 +70,76 @@ const Flashcards = () => {
                     <></>
                 )}
                 {flashcards && folders.map((folder) => {
-                    return (
-                        <Collapsible key={folder} title={folder} open={false}>
-                            {flashcards.map((card) => {
-                                if (card.folder === folder) {
-                                    let percent = 0
-                                    if (card.numberIncorrect != 0 && card.numberCorrect == 0) {
-                                        percent = 0
-                                    }
-                                    if (card.numberIncorrect == 0 && card.numberCorrect > 0) {
-                                        percent = 100
-                                    }
-                                    if (card.numberIncorrect != 0 && card.numberCorrect != 0) {
-                                        percent = (card.numberCorrect / (card.numberCorrect + card.numberIncorrect) * 100)
-                                    }
+                    if (folder !== 'Miscellaneous') {
+                        return (
+                            <Collapsible key={folder} title={folder} open={false}>
+                                {flashcards.map((card) => {
+                                    if (card.folder === folder && card.folder !== 'Miscellaneous') {
+                                        let percent = 0
+                                        if (card.numberIncorrect != 0 && card.numberCorrect == 0) {
+                                            percent = 0
+                                        }
+                                        if (card.numberIncorrect == 0 && card.numberCorrect > 0) {
+                                            percent = 100
+                                        }
+                                        if (card.numberIncorrect != 0 && card.numberCorrect != 0) {
+                                            percent = (card.numberCorrect / (card.numberCorrect + card.numberIncorrect) * 100)
+                                        }
 
-                                    return (
-                                        <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "card-grid-item bg-zinc-800 border border-neutral-700" : "card-grid-item bg-sky-900 border border-sky-600 overflow-hidden"}>
-                                            <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
-                                            <div id='card-grid-percent-outer' className="bg-neutral-900">
-                                                <div
-                                                    id='card-grid-percent-inner'
-                                                    style={{ width: `${percent}%`, height: `100%` }}
-                                                    className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
-                                                >
+                                        return (
+                                            <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "card-grid-item bg-zinc-800 border border-neutral-700" : "card-grid-item bg-sky-900 border border-sky-600 overflow-hidden"}>
+                                                <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
+                                                <div id='card-grid-percent-outer' className="bg-neutral-900">
+                                                    <div
+                                                        id='card-grid-percent-inner'
+                                                        style={{ width: `${percent}%`, height: `100%` }}
+                                                        className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
+                                                    >
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                    )
-                                }
-                            })}
-                        </Collapsible>
-                    )
+                                            </Link>
+                                        )
+                                    }
+                                })}
+                            </Collapsible>
+                        )
+                    }
+                })}
+                {flashcards && folders.map((folder) => {
+                    if (folder === 'Miscellaneous') {
+                        return (
+                            <Collapsible key={folder} title={folder} open={false}>
+                                {flashcards.map((card) => {
+                                    if (card.folder == 'Miscellaneous') {
+                                        let percent = 0
+                                        if (card.numberIncorrect != 0 && card.numberCorrect == 0) {
+                                            percent = 0
+                                        }
+                                        if (card.numberIncorrect == 0 && card.numberCorrect > 0) {
+                                            percent = 100
+                                        }
+                                        if (card.numberIncorrect != 0 && card.numberCorrect != 0) {
+                                            percent = (card.numberCorrect / (card.numberCorrect + card.numberIncorrect) * 100)
+                                        }
+
+                                        return (
+                                            <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "card-grid-item bg-zinc-800 border border-neutral-700" : "card-grid-item bg-sky-900 border border-sky-600 overflow-hidden"}>
+                                                <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
+                                                <div id='card-grid-percent-outer' className="bg-neutral-900">
+                                                    <div
+                                                        id='card-grid-percent-inner'
+                                                        style={{ width: `${percent}%`, height: `100%` }}
+                                                        className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
+                                                    >
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        )
+                                    }
+                                })}
+                            </Collapsible>
+                        )
+                    }
                 })}
                 <Link href={"/flashcards/create"} className="absolute bottom-1 right-1 w-12 rounded-full aspect-square text-center text-white text-4xl leading-[42px] font-light">
                     +
