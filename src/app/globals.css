@@ -40,6 +40,11 @@ body {
     height: 100vh;
 } */
 
+*, *::after, *::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
 
 html {
     --s: 7px; /* control the size*/
@@ -388,13 +393,15 @@ b {
 .card-grid-item {
     /* border: none; */
     font-size: 1em;
-    border-radius: 5px;
+    border-radius: 7px;
     overflow: hidden;
     text-align: center;
-    min-width: 47px;
+    min-width: 52px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     /* flex: auto; if I want them to grow */
 }
 .card-grid-item:hover {
@@ -402,9 +409,9 @@ b {
 }
 
 #card-grid-item-h3 {
-    text-align: center;
+    /* text-align: center; */
     margin: 0;
-    padding: 0.5rem;
+    padding: 0.5rem 0.6rem;
     width: 100%;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -430,11 +437,12 @@ b {
 }
 
 #card-grid-percent-outer {
-    height: 5px;
+    height: 8px;
     width: 100%;
     /* background-color: rgb(60,60,60); */
     /* border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px; */
+    border-radius: 5px;
     overflow: hidden;
 }
 

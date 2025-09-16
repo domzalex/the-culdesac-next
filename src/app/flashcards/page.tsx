@@ -37,6 +37,7 @@ const Flashcards = () => {
     return (
         <div className='flex-1 relative flex flex-col chatBg'>
             <div className="w-full mt-[52px] flex flex-col gap-12 p-3 overflow-y-scroll">
+            {/* <div className="w-full mt-[52px] flex flex-col overflow-y-scroll"> */}
                 {flashcards ? (
                     <Collapsible title="All Cards" open={true}>
                         {flashcards.map((card) => {
@@ -52,17 +53,28 @@ const Flashcards = () => {
                             }
 
                             return (
-                                <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "card-grid-item bg-zinc-800 border border-neutral-700" : "card-grid-item bg-sky-900 border border-sky-600 overflow-hidden"}>
+                                <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 && card.numberIncorrect > 0 ? "card-grid-item bg-zinc-800 p-1" : card.numberCorrect == 0 && card.numberIncorrect == 0 ? "card-grid-item bg-neutral-900 border border-neutral-800 p-[3px] overflow-hidden" : "card-grid-item bg-sky-700 p-1 overflow-hidden"}>
                                     <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
-                                    <div id='card-grid-percent-outer' className="bg-neutral-900">
+                                    <div id='card-grid-percent-outer' className={percent < 80 && card.numberIncorrect > 0 ? "bg-zinc-700" : card.numberCorrect == 0 && card.numberIncorrect == 0 ? "bg-zinc-800" : "bg-sky-900"}>
                                         <div
                                             id='card-grid-percent-inner'
                                             style={{ width: `${percent}%`, height: `100%` }}
-                                            className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
+                                            className={percent < 80 ? "bg-yellow-500 rounded-lg" : "bg-sky-400 rounded-lg"}
                                         >
                                         </div>
                                     </div>
                                 </Link>
+                                // <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "bg-zinc-800" : "bg-sky-900 overflow-hidden"}>
+                                //     <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
+                                //     <div id='card-grid-percent-outer' className="bg-neutral-900">
+                                //         <div
+                                //             id='card-grid-percent-inner'
+                                //             style={{ width: `${percent}%`, height: `100%` }}
+                                //             className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
+                                //         >
+                                //         </div>
+                                //     </div>
+                                // </Link>
                             )
                         })}
                     </Collapsible>
@@ -87,13 +99,13 @@ const Flashcards = () => {
                                         }
 
                                         return (
-                                            <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "card-grid-item bg-zinc-800 border border-neutral-700" : "card-grid-item bg-sky-900 border border-sky-600 overflow-hidden"}>
+                                            <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 && card.numberIncorrect > 0 ? "card-grid-item bg-zinc-800 p-1" : card.numberCorrect == 0 && card.numberIncorrect == 0 ? "card-grid-item bg-neutral-900 border border-neutral-800 p-[3px] overflow-hidden" : "card-grid-item bg-sky-700 p-1 overflow-hidden"}>
                                                 <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
-                                                <div id='card-grid-percent-outer' className="bg-neutral-900">
+                                                <div id='card-grid-percent-outer' className={percent < 80 && card.numberIncorrect > 0 ? "bg-zinc-700" : card.numberCorrect == 0 && card.numberIncorrect == 0 ? "bg-zinc-800" : "bg-sky-900"}>
                                                     <div
                                                         id='card-grid-percent-inner'
                                                         style={{ width: `${percent}%`, height: `100%` }}
-                                                        className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
+                                                        className={percent < 80 ? "bg-yellow-500 rounded-lg" : "bg-sky-400 rounded-lg"}
                                                     >
                                                     </div>
                                                 </div>
@@ -123,13 +135,13 @@ const Flashcards = () => {
                                         }
 
                                         return (
-                                            <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 ? "card-grid-item bg-zinc-800 border border-neutral-700" : "card-grid-item bg-sky-900 border border-sky-600 overflow-hidden"}>
+                                            <Link key={card.id} href={`/flashcards/${card.front}`} className={percent < 80 && card.numberIncorrect > 0 ? "card-grid-item bg-zinc-800 p-1" : card.numberCorrect == 0 && card.numberIncorrect == 0 ? "card-grid-item bg-neutral-900 border border-neutral-800 p-[3px] overflow-hidden" : "card-grid-item bg-sky-700 p-1 overflow-hidden"}>
                                                 <h3 id='card-grid-item-h3' className="text-neutral-200 font-bold">{card.front}</h3>
-                                                <div id='card-grid-percent-outer' className="bg-neutral-900">
+                                                <div id='card-grid-percent-outer' className={percent < 80 && card.numberIncorrect > 0 ? "bg-zinc-700" : card.numberCorrect == 0 && card.numberIncorrect == 0 ? "bg-zinc-800" : "bg-sky-900"}>
                                                     <div
                                                         id='card-grid-percent-inner'
                                                         style={{ width: `${percent}%`, height: `100%` }}
-                                                        className={percent < 80 ? "bg-yellow-500" : "bg-sky-500"}
+                                                        className={percent < 80 ? "bg-yellow-500 rounded-lg" : "bg-sky-400 rounded-lg"}
                                                     >
                                                     </div>
                                                 </div>
