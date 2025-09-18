@@ -26,6 +26,9 @@ const Page = () => {
     const [isCorrect, setIsCorrect] = useState(false)
     const [alert, setAlert] = useState(false)
 
+    const [splitOne, setSplitOne] = useState('')
+    const [splitTwo, setSplitTwo] = useState('')
+
     useEffect(() => {
         const cards = localStorage.getItem('flashcards')
         if (cards) {
@@ -39,6 +42,16 @@ const Page = () => {
             const cardTitle = cardName.split("/")
             const cardToSet = flashcards.find(card => card.front === cardTitle[cardTitle.length - 1])
             setCard(cardToSet)
+            if (cardToSet) {
+                let split = cardToSet.front.match(/([^\(\)]+)|(\([^)]*\))/g)
+                if (split) {
+                    setSplitOne(split[0])
+                    setSplitTwo(split[1])
+                } else {
+                    setSplitOne(cardToSet.front)
+                    setSplitTwo('')
+                }
+            }
         }
     }, [flashcards, cardName])
 
@@ -50,7 +63,6 @@ const Page = () => {
 
     const checkCard = () => {
         if (card) {
-            console.log(valueToCheck, card.back)
             if (valueToCheck.toLowerCase() == card.back.toLowerCase()) {
                 setIsCorrect(true)
                 updateCardCorrect(card.id, 'numberCorrect')
@@ -93,25 +105,26 @@ const Page = () => {
                 <div id='card'>
                     <div id='card-inner' className={checked ? 'card-hover' : 'none'}>
                         <div id='card-front'>
-                            <h1 className="card-info text-white">{card?.front}</h1>
+                            <h1 className="card-info text-white text-2xl">{splitOne}</h1>
+                            <h2 className="card-info text-neutral-600 font-light">{splitTwo}</h2>
                             <button className='absolute bottom-1 right-1 rotate-45 text-neutral-600 font-light text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
                         </div>
                         <div id='card-back'>
                             <h1 id='card-back-header'>
-                                {card?.front}
+                                {splitOne}
                             </h1>
                             <div id='card-back-inner'>
-                                <h1 className="card-info text-white">{card?.back}</h1>
-                                <h1 className={isCorrect ? 'card-info text-emerald-600' : 'card-info text-red-500 line-through'}>{valueToCheck.charAt(0).toUpperCase() + valueToCheck.slice(1)}</h1>
+                                <h1 className="card-info text-white text-xl">{card?.back}</h1>
+                                <h1 className={isCorrect ? 'card-info text-emerald-600 text-xl' : 'text-xl card-info text-red-500 line-through'}>{valueToCheck.charAt(0).toUpperCase() + valueToCheck.slice(1)}</h1>
                             </div>
                             <button className='absolute bottom-1 right-1 rotate-45 text-neutral-600 font-light text-[28px] pb-[3px] leading-[0px] text-center w-[36px] h-[36px]' onClick={() => setAlert(true)}>+</button>
                         </div>
                     </div>
                 </div>
                 {!checked ? (
-                    <div id='card-check-container' className='flex gap-3'>
-                        <input className="flex-1 bg-transparent text-xl text-neutral-200 card-input text-center border border-neutral-700 font-light px-2 py-1 rounded" placeholder='What is this in English?' onChange={(e) => {setValueToCheck(e.target.value)}} />
-                        <button className="flex-1 bg-emerald-800 text-white rounded px-3 py-2 font-bold" onClick={checkCard}>Submit</button>
+                    <div id='card-check-container' className='flex gap-3 w-[90%]'>
+                        <input className="backdrop-blur-sm w-3/4 bg-neutral-950/20 text-neutral-200 card-input text-center border border-neutral-700 font-light px-2 py-1 rounded" placeholder='What is this in English?' onChange={(e) => {setValueToCheck(e.target.value)}} />
+                        <button className="bg-emerald-800 text-white flex-1 rounded px-3 py-2 font-bold" onClick={checkCard}>Submit</button>
                     </div>
                 ) : (
                     <div id='card-check-container'>

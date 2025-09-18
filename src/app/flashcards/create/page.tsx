@@ -75,7 +75,7 @@ const CreateFlashcard = () => {
                     </div>
                 </div>
                 <div className="flex gap-3 w-5/6 max-w-[500px]">
-                    <input className="w-2/3 bg-transparent text-lgl text-neutral-200 card-input font-light px-2 py-1 rounded border border-neutral-700" placeholder="Folder" value={folder} onChange={(e) => {setFolder(e.target.value)}}/>
+                    <input className="w-2/3 bg-neutral-950/20 backdrop-blur-sm text-neutral-200 card-input font-light px-2 py-1 rounded border border-neutral-700" placeholder="Folder" value={folder} onChange={(e) => {setFolder(e.target.value)}}/>
                     <button className="bg-emerald-800 flex-1 text-white rounded px-4 py-2 font-bold" onClick={createCard}>Submit</button>
                 </div>
             </div>
