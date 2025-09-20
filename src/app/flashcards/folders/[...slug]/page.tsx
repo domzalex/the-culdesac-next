@@ -17,7 +17,8 @@ const Page = () => {
     }
 
     const path = usePathname()
-    const cardName = decodeURIComponent(path)
+    const cardName = decodeURIComponent(path).split("/")
+    const cardFolder = cardName[cardName.length - 1]
 
     const [allCards, setAllCards] = useState<Flashcard[]>([])
     const [filteredFlashcards, setFilteredFlashcards] = useState<Flashcard[]>([])
@@ -35,17 +36,19 @@ const Page = () => {
         if (cards) {
             const parsedCards = JSON.parse(cards)
             setAllCards(parsedCards)
-            const cardTitle = cardName.split("/")
-            const folder = parsedCards.find((card: Flashcard) => card.front === cardTitle[cardTitle.length - 1]).folder
-            const filtered = parsedCards.filter((card: Flashcard) => card.folder == folder)
-            setFilteredFlashcards(filtered)
+            if (cardFolder !== "All Cards") {
+                const filtered = parsedCards.filter((card: Flashcard) => card.folder == cardFolder)
+                setFilteredFlashcards(filtered)
+            } else {
+                setFilteredFlashcards(parsedCards)
+            }
         }
     }, [])
 
     useEffect(() => {
         if (filteredFlashcards && filteredFlashcards.length > 0) {
-            const cardTitle = cardName.split("/")
-            const cardToSet = filteredFlashcards.find(card => card.front === cardTitle[cardTitle.length - 1])
+            let n = Math.floor(Math.random() * filteredFlashcards.length)
+            const cardToSet = filteredFlashcards[n]
             setCard(cardToSet)
             if (cardToSet) {
                 let split = cardToSet.front.match(/([^\(\)]+)|(\([^)]*\))/g)
@@ -58,8 +61,9 @@ const Page = () => {
                 }
             }
         }
-    }, [filteredFlashcards, cardName])
+    }, [filteredFlashcards])
 
+    // For updating stored cards AFTER checking
     useEffect(() => {
         if (allCards.length > 0) {
             localStorage.setItem('flashcards', JSON.stringify(allCards))
@@ -91,10 +95,11 @@ const Page = () => {
         if (filteredFlashcards.length == 1) {
             router.push(`/flashcards`)
         }
-        let tempCards = filteredFlashcards.filter((card) => card !== card)
-        let n = Math.floor(Math.random() * tempCards.length)
-        console.log(n)
-        router.push(`/flashcards/${filteredFlashcards[n].front}`)
+        setChecked(false)
+        let tempCards = filteredFlashcards.filter((c) => c !== card)
+        setTimeout(() => {
+            setFilteredFlashcards(tempCards)
+        }, 275)
     }
 
     const removeCard = () => {
@@ -151,10 +156,9 @@ const Page = () => {
                         <button className="bg-emerald-800 text-neutral-200 flex-1 rounded px-3 py-2 font-bold" onClick={checkCard}>Submit</button>
                     </div>
                 ) : (
-                    // <div id='card-check-container'>
-                    //     <button className="bg-emerald-800 text-neutral-200 rounded px-3 py-2 font-bold w-max" onClick={newCard}>New Card</button>
-                    // </div>
-                    <></>
+                    <div id='card-check-container'>
+                        <button className="bg-emerald-800 text-neutral-200 rounded px-3 py-2 font-bold w-max" onClick={newCard}>New Card</button>
+                    </div>
                 )}
             </div>
             {alert ? (
